@@ -404,6 +404,27 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct BlendTreeWeights {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    public QListPtr<FP> Values;
+    public override Int32 GetHashCode() {
+      unchecked { 
+        var hash = 14387;
+        hash = hash * 31 + Values.GetHashCode();
+        return hash;
+      }
+    }
+    public void ClearPointers(FrameBase f, EntityRef entity) {
+      Values = default;
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (BlendTreeWeights*)ptr;
+        QList.Serialize(&p->Values, serializer, Statics.SerializeFP);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Input {
     public const Int32 SIZE = 48;
     public const Int32 ALIGNMENT = 4;
@@ -529,6 +550,243 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  [Union()]
+  public unsafe partial struct AnimatorRuntimeVariable {
+    public const Int32 SIZE = 16;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    private Int32 _field_used_;
+    [FieldOffset(8)]
+    [FieldOverlap(8)]
+    [FramePrinter.PrintIf("_field_used_", Quantum.AnimatorRuntimeVariable.FPVALUE)]
+    private FP _FPValue;
+    [FieldOffset(8)]
+    [FieldOverlap(8)]
+    [FramePrinter.PrintIf("_field_used_", Quantum.AnimatorRuntimeVariable.INTEGERVALUE)]
+    private Int32 _IntegerValue;
+    [FieldOffset(8)]
+    [FieldOverlap(8)]
+    [FramePrinter.PrintIf("_field_used_", Quantum.AnimatorRuntimeVariable.BOOLEANVALUE)]
+    private QBoolean _BooleanValue;
+    public const Int32 FPVALUE = 1;
+    public const Int32 INTEGERVALUE = 2;
+    public const Int32 BOOLEANVALUE = 3;
+    public Int32 Field {
+      get {
+        return _field_used_;
+      }
+    }
+    public FP* FPValue {
+      get {
+        fixed (FP* p = &_FPValue) {
+          if (_field_used_ != FPVALUE) {
+            Native.Utils.Clear(p, 8);
+            _field_used_ = FPVALUE;
+          }
+          return p;
+        }
+      }
+    }
+    public Int32* IntegerValue {
+      get {
+        fixed (Int32* p = &_IntegerValue) {
+          if (_field_used_ != INTEGERVALUE) {
+            Native.Utils.Clear(p, 4);
+            _field_used_ = INTEGERVALUE;
+          }
+          return p;
+        }
+      }
+    }
+    public QBoolean* BooleanValue {
+      get {
+        fixed (QBoolean* p = &_BooleanValue) {
+          if (_field_used_ != BOOLEANVALUE) {
+            Native.Utils.Clear(p, 4);
+            _field_used_ = BOOLEANVALUE;
+          }
+          return p;
+        }
+      }
+    }
+    public override Int32 GetHashCode() {
+      unchecked { 
+        var hash = 19843;
+        hash = hash * 31 + _field_used_.GetHashCode();
+        hash = hash * 31 + _FPValue.GetHashCode();
+        hash = hash * 31 + _IntegerValue.GetHashCode();
+        hash = hash * 31 + _BooleanValue.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (AnimatorRuntimeVariable*)ptr;
+        if (serializer.InputMode) {
+          serializer.Stream.SerializeBuffer((byte*)p, Quantum.AnimatorRuntimeVariable.SIZE);
+          return;
+        }
+        serializer.Stream.Serialize(&p->_field_used_);
+        if (p->_field_used_ == BOOLEANVALUE) {
+          QBoolean.Serialize(&p->_BooleanValue, serializer);
+        }
+        if (p->_field_used_ == FPVALUE) {
+          FP.Serialize(&p->_FPValue, serializer);
+        }
+        if (p->_field_used_ == INTEGERVALUE) {
+          serializer.Stream.Serialize(&p->_IntegerValue);
+        }
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct AnimatorComponent : Quantum.IComponent {
+    public const Int32 SIZE = 176;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(40)]
+    public AssetRef<AnimatorGraph> AnimatorGraph;
+    [FieldOffset(48)]
+    public EntityRef Self;
+    [FieldOffset(120)]
+    [HideInInspector()]
+    public FP Time;
+    [FieldOffset(104)]
+    [HideInInspector()]
+    public FP NormalizedTime;
+    [FieldOffset(88)]
+    [HideInInspector()]
+    public FP LastTime;
+    [FieldOffset(96)]
+    [HideInInspector()]
+    public FP Length;
+    [FieldOffset(4)]
+    [HideInInspector()]
+    public Int32 CurrentStateId;
+    [FieldOffset(20)]
+    [HideInInspector()]
+    public QBoolean Freeze;
+    [FieldOffset(112)]
+    [HideInInspector()]
+    public FP Speed;
+    [FieldOffset(8)]
+    [HideInInspector()]
+    public Int32 FromStateId;
+    [FieldOffset(80)]
+    [HideInInspector()]
+    public FP FromStateTime;
+    [FieldOffset(64)]
+    [HideInInspector()]
+    public FP FromStateLastTime;
+    [FieldOffset(72)]
+    [HideInInspector()]
+    public FP FromStateNormalizedTime;
+    [FieldOffset(56)]
+    [HideInInspector()]
+    public FP FromLength;
+    [FieldOffset(12)]
+    [HideInInspector()]
+    public Int32 ToStateId;
+    [FieldOffset(152)]
+    [HideInInspector()]
+    public FP ToStateTime;
+    [FieldOffset(136)]
+    [HideInInspector()]
+    public FP ToStateLastTime;
+    [FieldOffset(144)]
+    [HideInInspector()]
+    public FP ToStateNormalizedTime;
+    [FieldOffset(128)]
+    [HideInInspector()]
+    public FP ToLength;
+    [FieldOffset(16)]
+    [HideInInspector()]
+    public Int32 TransitionIndex;
+    [FieldOffset(168)]
+    [HideInInspector()]
+    public FP TransitionTime;
+    [FieldOffset(160)]
+    [HideInInspector()]
+    public FP TransitionDuration;
+    [FieldOffset(0)]
+    [HideInInspector()]
+    public Int32 AnimatorBlendCount;
+    [FieldOffset(24)]
+    public QBoolean IgnoreTransitions;
+    [FieldOffset(32)]
+    [HideInInspector()]
+    public QListPtr<AnimatorRuntimeVariable> AnimatorVariables;
+    [FieldOffset(28)]
+    [HideInInspector()]
+    public QDictionaryPtr<Int32, BlendTreeWeights> BlendTreeWeights;
+    public override Int32 GetHashCode() {
+      unchecked { 
+        var hash = 18413;
+        hash = hash * 31 + AnimatorGraph.GetHashCode();
+        hash = hash * 31 + Self.GetHashCode();
+        hash = hash * 31 + Time.GetHashCode();
+        hash = hash * 31 + NormalizedTime.GetHashCode();
+        hash = hash * 31 + LastTime.GetHashCode();
+        hash = hash * 31 + Length.GetHashCode();
+        hash = hash * 31 + CurrentStateId.GetHashCode();
+        hash = hash * 31 + Freeze.GetHashCode();
+        hash = hash * 31 + Speed.GetHashCode();
+        hash = hash * 31 + FromStateId.GetHashCode();
+        hash = hash * 31 + FromStateTime.GetHashCode();
+        hash = hash * 31 + FromStateLastTime.GetHashCode();
+        hash = hash * 31 + FromStateNormalizedTime.GetHashCode();
+        hash = hash * 31 + FromLength.GetHashCode();
+        hash = hash * 31 + ToStateId.GetHashCode();
+        hash = hash * 31 + ToStateTime.GetHashCode();
+        hash = hash * 31 + ToStateLastTime.GetHashCode();
+        hash = hash * 31 + ToStateNormalizedTime.GetHashCode();
+        hash = hash * 31 + ToLength.GetHashCode();
+        hash = hash * 31 + TransitionIndex.GetHashCode();
+        hash = hash * 31 + TransitionTime.GetHashCode();
+        hash = hash * 31 + TransitionDuration.GetHashCode();
+        hash = hash * 31 + AnimatorBlendCount.GetHashCode();
+        hash = hash * 31 + IgnoreTransitions.GetHashCode();
+        hash = hash * 31 + AnimatorVariables.GetHashCode();
+        hash = hash * 31 + BlendTreeWeights.GetHashCode();
+        return hash;
+      }
+    }
+    public void ClearPointers(FrameBase f, EntityRef entity) {
+      AnimatorVariables = default;
+      BlendTreeWeights = default;
+    }
+    public static void OnRemoved(FrameBase frame, EntityRef entity, void* ptr) {
+      var p = (Quantum.AnimatorComponent*)ptr;
+      p->ClearPointers((Frame)frame, entity);
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (AnimatorComponent*)ptr;
+        serializer.Stream.Serialize(&p->AnimatorBlendCount);
+        serializer.Stream.Serialize(&p->CurrentStateId);
+        serializer.Stream.Serialize(&p->FromStateId);
+        serializer.Stream.Serialize(&p->ToStateId);
+        serializer.Stream.Serialize(&p->TransitionIndex);
+        QBoolean.Serialize(&p->Freeze, serializer);
+        QBoolean.Serialize(&p->IgnoreTransitions, serializer);
+        QDictionary.Serialize(&p->BlendTreeWeights, serializer, Statics.SerializeInt32, Statics.SerializeBlendTreeWeights);
+        QList.Serialize(&p->AnimatorVariables, serializer, Statics.SerializeAnimatorRuntimeVariable);
+        AssetRef.Serialize(&p->AnimatorGraph, serializer);
+        EntityRef.Serialize(&p->Self, serializer);
+        FP.Serialize(&p->FromLength, serializer);
+        FP.Serialize(&p->FromStateLastTime, serializer);
+        FP.Serialize(&p->FromStateNormalizedTime, serializer);
+        FP.Serialize(&p->FromStateTime, serializer);
+        FP.Serialize(&p->LastTime, serializer);
+        FP.Serialize(&p->Length, serializer);
+        FP.Serialize(&p->NormalizedTime, serializer);
+        FP.Serialize(&p->Speed, serializer);
+        FP.Serialize(&p->Time, serializer);
+        FP.Serialize(&p->ToLength, serializer);
+        FP.Serialize(&p->ToStateLastTime, serializer);
+        FP.Serialize(&p->ToStateNormalizedTime, serializer);
+        FP.Serialize(&p->ToStateTime, serializer);
+        FP.Serialize(&p->TransitionDuration, serializer);
+        FP.Serialize(&p->TransitionTime, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AsteroidsShip : Quantum.IComponent {
     public const Int32 SIZE = 4;
     public const Int32 ALIGNMENT = 4;
@@ -578,6 +836,8 @@ namespace Quantum {
       Initialize(this, this.SimulationConfig.Entities, 256);
       _ComponentSignalsOnAdded = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
       _ComponentSignalsOnRemoved = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
+      BuildSignalsArrayOnComponentAdded<Quantum.AnimatorComponent>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.AnimatorComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.AsteroidsShip>();
       BuildSignalsArrayOnComponentRemoved<Quantum.AsteroidsShip>();
       BuildSignalsArrayOnComponentAdded<CharacterController2D>();
@@ -646,11 +906,21 @@ namespace Quantum {
     }
   }
   public unsafe partial class Statics {
+    public static FrameSerializer.Delegate SerializeAnimatorRuntimeVariable;
+    public static FrameSerializer.Delegate SerializeInt32;
+    public static FrameSerializer.Delegate SerializeBlendTreeWeights;
+    public static FrameSerializer.Delegate SerializeFP;
     public static FrameSerializer.Delegate SerializeInput;
     static partial void InitStaticDelegatesGen() {
+      SerializeAnimatorRuntimeVariable = Quantum.AnimatorRuntimeVariable.Serialize;
+      SerializeInt32 = (v, s) => {{ s.Stream.Serialize((Int32*)v); }};
+      SerializeBlendTreeWeights = Quantum.BlendTreeWeights.Serialize;
+      SerializeFP = FP.Serialize;
       SerializeInput = Quantum.Input.Serialize;
     }
     static partial void RegisterSimulationTypesGen(TypeRegistry typeRegistry) {
+      typeRegistry.Register(typeof(Quantum.AnimatorComponent), Quantum.AnimatorComponent.SIZE);
+      typeRegistry.Register(typeof(Quantum.AnimatorRuntimeVariable), Quantum.AnimatorRuntimeVariable.SIZE);
       typeRegistry.Register(typeof(AssetGuid), AssetGuid.SIZE);
       typeRegistry.Register(typeof(AssetRef), AssetRef.SIZE);
       typeRegistry.Register(typeof(Quantum.AsteroidsShip), Quantum.AsteroidsShip.SIZE);
@@ -661,6 +931,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.BitSet4096), Quantum.BitSet4096.SIZE);
       typeRegistry.Register(typeof(Quantum.BitSet512), Quantum.BitSet512.SIZE);
       typeRegistry.Register(typeof(Quantum.BitSet6), Quantum.BitSet6.SIZE);
+      typeRegistry.Register(typeof(Quantum.BlendTreeWeights), Quantum.BlendTreeWeights.SIZE);
       typeRegistry.Register(typeof(Button), Button.SIZE);
       typeRegistry.Register(typeof(CallbackFlags), 4);
       typeRegistry.Register(typeof(CharacterController2D), CharacterController2D.SIZE);
@@ -732,8 +1003,9 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 2)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 3)
         .AddBuiltInComponents()
+        .Add<Quantum.AnimatorComponent>(Quantum.AnimatorComponent.Serialize, null, Quantum.AnimatorComponent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.AsteroidsShip>(Quantum.AsteroidsShip.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlayerLink>(Quantum.PlayerLink.Serialize, null, null, ComponentFlags.None)
         .Finish();

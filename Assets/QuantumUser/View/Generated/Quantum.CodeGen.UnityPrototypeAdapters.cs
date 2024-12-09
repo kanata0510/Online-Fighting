@@ -49,6 +49,93 @@ namespace Quantum.Prototypes.Unity {
   using RuntimeInitializeOnLoadMethodAttribute = UnityEngine.RuntimeInitializeOnLoadMethodAttribute;
   #endif //;
   
+  [System.SerializableAttribute()]
+  public unsafe partial class AnimatorComponentPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.AnimatorComponentPrototype> {
+    public AssetRef<AnimatorGraph> AnimatorGraph;
+    public Quantum.QuantumEntityPrototype Self;
+    [HideInInspector()]
+    public FP Time;
+    [HideInInspector()]
+    public FP NormalizedTime;
+    [HideInInspector()]
+    public FP LastTime;
+    [HideInInspector()]
+    public FP Length;
+    [HideInInspector()]
+    public Int32 CurrentStateId;
+    [HideInInspector()]
+    public QBoolean Freeze;
+    [HideInInspector()]
+    public FP Speed;
+    [HideInInspector()]
+    public Int32 FromStateId;
+    [HideInInspector()]
+    public FP FromStateTime;
+    [HideInInspector()]
+    public FP FromStateLastTime;
+    [HideInInspector()]
+    public FP FromStateNormalizedTime;
+    [HideInInspector()]
+    public FP FromLength;
+    [HideInInspector()]
+    public Int32 ToStateId;
+    [HideInInspector()]
+    public FP ToStateTime;
+    [HideInInspector()]
+    public FP ToStateLastTime;
+    [HideInInspector()]
+    public FP ToStateNormalizedTime;
+    [HideInInspector()]
+    public FP ToLength;
+    [HideInInspector()]
+    public Int32 TransitionIndex;
+    [HideInInspector()]
+    public FP TransitionTime;
+    [HideInInspector()]
+    public FP TransitionDuration;
+    [HideInInspector()]
+    public Int32 AnimatorBlendCount;
+    public QBoolean IgnoreTransitions;
+    [HideInInspector()]
+    [DynamicCollectionAttribute()]
+    public Quantum.Prototypes.AnimatorRuntimeVariablePrototype[] AnimatorVariables = {};
+    [HideInInspector()]
+    [DictionaryAttribute()]
+    [DynamicCollectionAttribute()]
+    public DictionaryEntry_Int32_BlendTreeWeights[] BlendTreeWeights = {};
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.AnimatorComponentPrototype prototype);
+    public override Quantum.Prototypes.AnimatorComponentPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.AnimatorComponentPrototype();
+      converter.Convert(this.AnimatorGraph, out result.AnimatorGraph);
+      converter.Convert(this.Self, out result.Self);
+      converter.Convert(this.Time, out result.Time);
+      converter.Convert(this.NormalizedTime, out result.NormalizedTime);
+      converter.Convert(this.LastTime, out result.LastTime);
+      converter.Convert(this.Length, out result.Length);
+      converter.Convert(this.CurrentStateId, out result.CurrentStateId);
+      converter.Convert(this.Freeze, out result.Freeze);
+      converter.Convert(this.Speed, out result.Speed);
+      converter.Convert(this.FromStateId, out result.FromStateId);
+      converter.Convert(this.FromStateTime, out result.FromStateTime);
+      converter.Convert(this.FromStateLastTime, out result.FromStateLastTime);
+      converter.Convert(this.FromStateNormalizedTime, out result.FromStateNormalizedTime);
+      converter.Convert(this.FromLength, out result.FromLength);
+      converter.Convert(this.ToStateId, out result.ToStateId);
+      converter.Convert(this.ToStateTime, out result.ToStateTime);
+      converter.Convert(this.ToStateLastTime, out result.ToStateLastTime);
+      converter.Convert(this.ToStateNormalizedTime, out result.ToStateNormalizedTime);
+      converter.Convert(this.ToLength, out result.ToLength);
+      converter.Convert(this.TransitionIndex, out result.TransitionIndex);
+      converter.Convert(this.TransitionTime, out result.TransitionTime);
+      converter.Convert(this.TransitionDuration, out result.TransitionDuration);
+      converter.Convert(this.AnimatorBlendCount, out result.AnimatorBlendCount);
+      converter.Convert(this.IgnoreTransitions, out result.IgnoreTransitions);
+      converter.Convert(this.AnimatorVariables, out result.AnimatorVariables);
+      converter.Convert(this.BlendTreeWeights, out result.BlendTreeWeights);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
 }
 #pragma warning restore 0109
 #pragma warning restore 1591
