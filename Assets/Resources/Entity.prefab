@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 3633830815750742738}
   - component: {fileID: 1051850129577544204}
   - component: {fileID: 8031557040001649629}
-  - component: {fileID: 933033453997583739}
-  - component: {fileID: 8037751296941684728}
-  - component: {fileID: 2523897308720309487}
+  - component: {fileID: 8656623791175311589}
+  - component: {fileID: 6980867184695776314}
   m_Layer: 0
   m_Name: Entity
   m_TagString: Untagged
@@ -129,7 +128,7 @@ MonoBehaviour:
     CallbackFlags:
       Value: 0
   PhysicsBody:
-    IsEnabled: 0
+    IsEnabled: 1
     Config2D: 116
     Config3D: 58
     RotationFreeze: 0
@@ -152,7 +151,7 @@ MonoBehaviour:
       Z:
         RawValue: 0
     GravityScale:
-      _hasValue: 0
+      _hasValue: 1
       _value:
         RawValue: 65536
   NavMeshPathfinder:
@@ -222,7 +221,7 @@ MonoBehaviour:
   OnEntityDestroyed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &933033453997583739
+--- !u!114 &8656623791175311589
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -231,56 +230,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8176199811940016233}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d30eb61f7a253804babb4495cad65792, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d30ca7da83a12a4fb901c969b315fc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    AnimatorGraph:
-      Id:
-        Value: 323841163651056587
-    Self: {fileID: 1051850129577544204}
-    Time:
-      RawValue: 0
-    NormalizedTime:
-      RawValue: 0
-    LastTime:
-      RawValue: 0
-    Length:
-      RawValue: 0
-    CurrentStateId: 0
-    Freeze:
-      Value: 0
-    Speed:
-      RawValue: 0
-    FromStateId: 0
-    FromStateTime:
-      RawValue: 0
-    FromStateLastTime:
-      RawValue: 0
-    FromStateNormalizedTime:
-      RawValue: 0
-    FromLength:
-      RawValue: 0
-    ToStateId: 0
-    ToStateTime:
-      RawValue: 0
-    ToStateLastTime:
-      RawValue: 0
-    ToStateNormalizedTime:
-      RawValue: 0
-    ToLength:
-      RawValue: 0
-    TransitionIndex: 0
-    TransitionTime:
-      RawValue: 0
-    TransitionDuration:
-      RawValue: 0
-    AnimatorBlendCount: 0
-    IgnoreTransitions:
-      Value: 0
-    AnimatorVariables: []
-    BlendTreeWeights: []
---- !u!114 &8037751296941684728
+    _empty_prototype_dummy_field_: 0
+--- !u!114 &6980867184695776314
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -295,18 +250,6 @@ MonoBehaviour:
   Prototype:
     PlayerRef:
       _index: 0
---- !u!114 &2523897308720309487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8176199811940016233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb827ab91614ad148869518cf60e7034, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3764717402613422339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -360,9 +303,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 49f2055d53eeb4e5a92af590a44bddee, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 8f0565f23a2b58541a475bd3c1393052, type: 3}
+    - target: {fileID: 9500000, guid: 49f2055d53eeb4e5a92af590a44bddee, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 49f2055d53eeb4e5a92af590a44bddee, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 11400040, guid: 49f2055d53eeb4e5a92af590a44bddee, type: 3}
       propertyPath: m_Enabled
       value: 0
