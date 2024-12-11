@@ -1,0 +1,6 @@
+component PunchRef
+{
+    EntityRef Target;
+    FP RecoveryTime;
+    FP AnimationRecoveryTime;
+}

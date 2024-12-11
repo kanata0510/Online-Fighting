@@ -1,4 +1,6 @@
 global
 {
-    Int32 AsteroidsWaveCount;
+    FP PunchRecoveryMaxTime;
+    FP PunchAnimationRecoveryMaxTime;
+    Int32 PlayerCount;
 }

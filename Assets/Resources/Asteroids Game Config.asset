@@ -18,13 +18,12 @@ MonoBehaviour:
       Value: 394906534049221855
   AsteroidPrototype:
     Id:
-      Value: 1373441723276087153
-  AsteroidInitialSpeed:
-    RawValue: 524288
-  AsteroidInitialTorqueMin:
-    RawValue: 458752
-  AsteroidInitialTorqueMax:
-    RawValue: 1310720
-  AsteroidSpawnDistanceToCenter:
-    RawValue: 1310720
-  InitialAsteroidsCount: 5
+      Value: 1465063172171457746
+  PunchRecoveryTime:
+    RawValue: 32768
+  PunchAnimationRecoveryTime:
+    RawValue: 13107
+  PunchPower:
+    RawValue: 327680
+  MaxHP: 100
+  PunchDamage: 40

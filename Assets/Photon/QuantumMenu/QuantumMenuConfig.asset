@@ -30,6 +30,5 @@ MonoBehaviour:
   - us
   - usw
   _availableScenes: []
-  _machineId: {fileID: -755480892457977500, guid: fbd1d0c57fd428c44b08e505acb8d851,
-    type: 3}
+  _machineId: {fileID: -755480892457977500, guid: fbd1d0c57fd428c44b08e505acb8d851, type: 3}
   _codeGenerator: {fileID: 11400000, guid: e38f1fac5a1a5c94da2b4ef21bd48419, type: 2}

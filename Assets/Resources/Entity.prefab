@@ -11,8 +11,11 @@ GameObject:
   - component: {fileID: 3633830815750742738}
   - component: {fileID: 1051850129577544204}
   - component: {fileID: 8031557040001649629}
-  - component: {fileID: 8656623791175311589}
-  - component: {fileID: 6980867184695776314}
+  - component: {fileID: -7028455618718903614}
+  - component: {fileID: 2603736062419756456}
+  - component: {fileID: -7863984893228538256}
+  - component: {fileID: 886091114397486474}
+  - component: {fileID: -4654307907260139799}
   m_Layer: 0
   m_Name: Entity
   m_TagString: Untagged
@@ -60,7 +63,7 @@ MonoBehaviour:
     Material:
       Id:
         Value: 0
-    SourceCollider: {fileID: 0}
+    SourceCollider: {fileID: 886091114397486474}
     IsEnabled: 1
     Shape2D:
       ShapeType: 0
@@ -98,12 +101,12 @@ MonoBehaviour:
       CapsuleRadius:
         RawValue: 13107
       CapsuleHeight:
-        RawValue: 94392
+        RawValue: 94391
       PositionOffset:
         X:
           RawValue: 0
         Y:
-          RawValue: 52429
+          RawValue: 52428
         Z:
           RawValue: 0
       BoxExtents:
@@ -126,12 +129,12 @@ MonoBehaviour:
     LayerSource: 0
     Layer: 0
     CallbackFlags:
-      Value: 0
+      Value: 128
   PhysicsBody:
     IsEnabled: 1
     Config2D: 116
     Config3D: 58
-    RotationFreeze: 0
+    RotationFreeze: 255
     Mass:
       RawValue: 65536
     Drag:
@@ -221,7 +224,7 @@ MonoBehaviour:
   OnEntityDestroyed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8656623791175311589
+--- !u!114 &-7028455618718903614
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -234,8 +237,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    _empty_prototype_dummy_field_: 0
---- !u!114 &6980867184695776314
+    PlayerHP:
+      RawValue: 0
+    PlayerNumber: 0
+--- !u!114 &2603736062419756456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -244,12 +249,102 @@ MonoBehaviour:
   m_GameObject: {fileID: 8176199811940016233}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 359dcaf738b82574d81f569811cd8acc, type: 3}
+  m_Script: {fileID: 11500000, guid: eb827ab91614ad148869518cf60e7034, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-7863984893228538256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176199811940016233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d30eb61f7a253804babb4495cad65792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    PlayerRef:
-      _index: 0
+    AnimatorGraph:
+      Id:
+        Value: 314230034172920148
+    Self: {fileID: 1051850129577544204}
+    Time:
+      RawValue: 0
+    NormalizedTime:
+      RawValue: 0
+    LastTime:
+      RawValue: 0
+    Length:
+      RawValue: 0
+    CurrentStateId: 0
+    Freeze:
+      Value: 0
+    Speed:
+      RawValue: 0
+    FromStateId: 0
+    FromStateTime:
+      RawValue: 0
+    FromStateLastTime:
+      RawValue: 0
+    FromStateNormalizedTime:
+      RawValue: 0
+    FromLength:
+      RawValue: 0
+    ToStateId: 0
+    ToStateTime:
+      RawValue: 0
+    ToStateLastTime:
+      RawValue: 0
+    ToStateNormalizedTime:
+      RawValue: 0
+    ToLength:
+      RawValue: 0
+    TransitionIndex: 0
+    TransitionTime:
+      RawValue: 0
+    TransitionDuration:
+      RawValue: 0
+    AnimatorBlendCount: 0
+    IgnoreTransitions:
+      Value: 0
+    AnimatorVariables: []
+    BlendTreeWeights: []
+--- !u!136 &886091114397486474
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176199811940016233}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Height: 1.4403
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!114 &-4654307907260139799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176199811940016233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b404928167e457e45adc1b9da9aed9ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3764717402613422339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -309,7 +404,7 @@ PrefabInstance:
     - target: {fileID: 9500000, guid: 49f2055d53eeb4e5a92af590a44bddee, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 9100000, guid: a2a354cdc9066f54faeeaa7bdb80ec5e, type: 2}
     - target: {fileID: 9500000, guid: 49f2055d53eeb4e5a92af590a44bddee, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0

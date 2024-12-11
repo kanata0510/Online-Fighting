@@ -1,3 +1,5 @@
 component PlayerCharacter
 {
+    FP PlayerHP;
+    Int32 PlayerNumber;
 }

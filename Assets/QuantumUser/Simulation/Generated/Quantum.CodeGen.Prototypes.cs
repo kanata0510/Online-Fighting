@@ -362,8 +362,8 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerCharacter))]
   public unsafe partial class PlayerCharacterPrototype : ComponentPrototype<Quantum.PlayerCharacter> {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
+    public FP PlayerHP;
+    public Int32 PlayerNumber;
     partial void MaterializeUser(Frame frame, ref Quantum.PlayerCharacter result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.PlayerCharacter component = default;
@@ -371,6 +371,8 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.PlayerCharacter result, in PrototypeMaterializationContext context = default) {
+        result.PlayerHP = this.PlayerHP;
+        result.PlayerNumber = this.PlayerNumber;
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -387,6 +389,38 @@ namespace Quantum.Prototypes {
     public void Materialize(Frame frame, ref Quantum.PlayerLink result, in PrototypeMaterializationContext context = default) {
         result.PlayerRef = this.PlayerRef;
         MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.Punch))]
+  public unsafe partial class PunchPrototype : ComponentPrototype<Quantum.Punch> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.Punch result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.Punch component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.Punch result, in PrototypeMaterializationContext context = default) {
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.PunchRef))]
+  public unsafe class PunchRefPrototype : ComponentPrototype<Quantum.PunchRef> {
+    public MapEntityId Target;
+    public FP RecoveryTime;
+    public FP AnimationRecoveryTime;
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.PunchRef component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.PunchRef result, in PrototypeMaterializationContext context = default) {
+        PrototypeValidator.FindMapEntity(this.Target, in context, out result.Target);
+        result.RecoveryTime = this.RecoveryTime;
+        result.AnimationRecoveryTime = this.AnimationRecoveryTime;
     }
   }
 }
