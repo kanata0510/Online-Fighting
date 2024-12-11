@@ -4,12 +4,9 @@ using UnityEngine;
 
 namespace Quantum.Asteroids
 {
-    public class AsteroidsGameConfig: AssetObject
+    public class FightGameConfig: AssetObject
     {
-        [Header("Asteroids configuration")]
-        [Tooltip("Prototype reference to spawn asteroids")]
-        public AssetRef<EntityPrototype> AsteroidPrototype;
-        [Tooltip("Speed applied to the asteroid when spawned")]
+        public AssetRef<EntityPrototype> PunchColliderPrototype;
         public FP PunchRecoveryTime = FP._1;
         public FP PunchAnimationRecoveryTime = FP._1;
         public FP PunchPower = FP._1;

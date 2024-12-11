@@ -1144,7 +1144,7 @@ MonoBehaviour:
           RawValue: 0
         ExitTime:
           RawValue: 7864
-        HasExitTime: 0
+        HasExitTime: 1
         CanTransitionToSelf: 1
         Conditions:
         - VariableName: Punch

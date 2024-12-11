@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Quantum.Asteroids
 {
     [Preserve]
-    public unsafe class FightCharacterSystem : SystemMainThreadFilter<FightCharacterSystem.Filter>, ISignalOnCollisionCharacterHitPunch, ISignalOnCollisionPunchHitCharacter
+    public unsafe class FightCharacterSystem : SystemMainThreadFilter<FightCharacterSystem.Filter>, ISignalOnCollisionCharacterHitPunch
     {
         public struct Filter
         {
@@ -27,72 +27,50 @@ namespace Quantum.Asteroids
 
             UpdateCharacterMovement(f, ref filter, input);
         }
-        
+
         private void UpdateCharacterMovement(Frame f, ref Filter filter, Input* input)
         {
-            FP turnSpeed = 1;
-            if (f.Unsafe.TryGetPointer(filter.Entity, out PunchRef* p))
+            PunchRef* punch = f.Unsafe.GetPointer<PunchRef>(filter.Entity);
+            PhysicsCollider3D* punchCollider = f.Unsafe.GetPointer<PhysicsCollider3D>(punch->Target);
+            if (punchCollider->Enabled)
             {
-                PhysicsCollider3D* punchCollider = f.Unsafe.GetPointer<PhysicsCollider3D>(p->Target);
-                if (punchCollider->Enabled)
-                {
-                    punchCollider->Enabled = false;
-                }
+                punchCollider->Enabled = false;
+            }
+            punch->RecoveryTime = punch->RecoveryTime - f.DeltaTime < FP._0 ? FP._0 : punch->RecoveryTime - f.DeltaTime;
+            punch->AnimationRecoveryTime = punch->AnimationRecoveryTime - f.DeltaTime < FP._0
+                ? FP._0
+                : punch->AnimationRecoveryTime - f.DeltaTime;
+            if (punch->AnimationRecoveryTime == FP._0)
+            {
+                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", false);
             }
 
-            if (f.Unsafe.TryGetPointer(filter.Entity, out PunchRef* punch) && punch->RecoveryTime == FP._0 && input->Fire)
+            if (input->Fire && punch->RecoveryTime == FP._0)
             {
+                Debug.Log("Punch");
                 Transform3D* punchTransform = f.Unsafe.GetPointer<Transform3D>(punch->Target);
                 punchTransform->Teleport(f,
                     filter.Transform->Position + filter.Transform->Forward * FP._0_50 +
                     filter.Transform->Up * FP._1_10);
-                PhysicsCollider3D* punchCollider = f.Unsafe.GetPointer<PhysicsCollider3D>(punch->Target);
                 punchCollider->Enabled = true;
+                
                 punch->RecoveryTime = f.Global->PunchRecoveryMaxTime;
                 punch->AnimationRecoveryTime = f.Global->PunchAnimationRecoveryMaxTime;
-                Debug.Log("Punch");
                 AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", true);
-                PunchRecovery(f, filter);
                 return;
             }
-
+            
+            FP turnSpeed = 1;
+            AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Backward", input->Left);
             if (input->Left)
             {
-                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Backward", true);
                 filter.Transform->Position += FPVector3.Back * turnSpeed * f.DeltaTime;
             }
-            else
-            {
-                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Backward", false);
-            }
+
+            AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Forward", input->Right);
             if (input->Right)
             {
-                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Forward", true);
                 filter.Transform->Position += FPVector3.Forward * turnSpeed * f.DeltaTime;
-            }
-            else
-            {
-                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Forward", false);
-            }
-            PunchRecovery(f, filter);
-        }
-
-        private void PunchRecovery(Frame f, Filter filter)
-        {
-            if (f.Unsafe.TryGetPointer(filter.Entity, out PunchRef* p))
-            {
-                if (p->RecoveryTime > 0)
-                {
-                    p->RecoveryTime = p->RecoveryTime - f.DeltaTime < FP._0 ? FP._0 : p->RecoveryTime - f.DeltaTime;
-                }
-                if (p->AnimationRecoveryTime > 0)
-                {
-                    p->AnimationRecoveryTime = p->AnimationRecoveryTime - f.DeltaTime < FP._0 ? FP._0 : p->AnimationRecoveryTime - f.DeltaTime;
-                }
-                else
-                {
-                    AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", false);
-                }
             }
         }
         
@@ -100,17 +78,11 @@ namespace Quantum.Asteroids
         {
             Debug.Log("OnCollisionCharacterHitPunch");
             var config = f.FindAsset(f.RuntimeConfig.GameConfig);
+            
+            PhysicsBody3D* physicsBody3D = f.Unsafe.GetPointer<PhysicsBody3D>(info.Entity);
+            Transform3D* transform = f.Unsafe.GetPointer<Transform3D>(info.Entity);
+            physicsBody3D->AddLinearImpulse(transform->Back * config.PunchPower);
             character->PlayerHP -= config.PunchDamage;
-            if (f.Unsafe.TryGetPointer(info.Entity, out PhysicsBody3D* physicsBody3D))
-            {
-                Transform3D* transform = f.Unsafe.GetPointer<Transform3D>(info.Entity);
-                physicsBody3D->AddLinearImpulse(transform->Back * config.PunchPower);
-            }
-        }
-        
-        public void OnCollisionPunchHitCharacter(Frame f, TriggerInfo3D info, Punch* punch, PlayerCharacter* character)
-        {
-            Debug.Log("OnCollisionPunchHitCharacter");
         }
     }
 }

@@ -1193,16 +1193,12 @@ namespace Quantum {
         FP.Serialize(&p->RecoveryTime, serializer);
     }
   }
-  public unsafe partial interface ISignalOnCollisionPunchHitCharacter : ISignal {
-    void OnCollisionPunchHitCharacter(Frame f, TriggerInfo3D info, Punch* punch, PlayerCharacter* character);
-  }
   public unsafe partial interface ISignalOnCollisionCharacterHitPunch : ISignal {
     void OnCollisionCharacterHitPunch(Frame f, TriggerInfo3D info, PlayerCharacter* character, Punch* punch);
   }
   public static unsafe partial class Constants {
   }
   public unsafe partial class Frame {
-    private ISignalOnCollisionPunchHitCharacter[] _ISignalOnCollisionPunchHitCharacterSystems;
     private ISignalOnCollisionCharacterHitPunch[] _ISignalOnCollisionCharacterHitPunchSystems;
     partial void AllocGen() {
       _globals = (_globals_*)Context.Allocator.AllocAndClear(sizeof(_globals_));
@@ -1215,7 +1211,6 @@ namespace Quantum {
     }
     partial void InitGen() {
       Initialize(this, this.SimulationConfig.Entities, 256);
-      _ISignalOnCollisionPunchHitCharacterSystems = BuildSignalsArray<ISignalOnCollisionPunchHitCharacter>();
       _ISignalOnCollisionCharacterHitPunchSystems = BuildSignalsArray<ISignalOnCollisionCharacterHitPunch>();
       _ComponentSignalsOnAdded = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
       _ComponentSignalsOnRemoved = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
@@ -1294,15 +1289,6 @@ namespace Quantum {
       Physics3D.Init(_globals->PhysicsState3D.MapStaticCollidersState.TrackedMap);
     }
     public unsafe partial struct FrameSignals {
-      public void OnCollisionPunchHitCharacter(TriggerInfo3D info, Punch* punch, PlayerCharacter* character) {
-        var array = _f._ISignalOnCollisionPunchHitCharacterSystems;
-        for (Int32 i = 0; i < array.Length; ++i) {
-          var s = array[i];
-          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
-            s.OnCollisionPunchHitCharacter(_f, info, punch, character);
-          }
-        }
-      }
       public void OnCollisionCharacterHitPunch(TriggerInfo3D info, PlayerCharacter* character, Punch* punch) {
         var array = _f._ISignalOnCollisionCharacterHitPunchSystems;
         for (Int32 i = 0; i < array.Length; ++i) {

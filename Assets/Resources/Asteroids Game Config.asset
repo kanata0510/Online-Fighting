@@ -16,7 +16,7 @@ MonoBehaviour:
     Path: Resources/Asteroids Game Config
     Guid:
       Value: 394906534049221855
-  AsteroidPrototype:
+  PunchColliderPrototype:
     Id:
       Value: 1465063172171457746
   PunchRecoveryTime:
@@ -26,4 +26,4 @@ MonoBehaviour:
   PunchPower:
     RawValue: 327680
   MaxHP: 100
-  PunchDamage: 40
+  PunchDamage: 30

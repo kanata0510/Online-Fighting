@@ -1,3 +1,1 @@
-signal OnCollisionPunchHitCharacter(TriggerInfo3D info, Punch* punch, PlayerCharacter* character);
-
 signal OnCollisionCharacterHitPunch(TriggerInfo3D info, PlayerCharacter* character, Punch* punch);
