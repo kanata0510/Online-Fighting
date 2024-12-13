@@ -2,6 +2,6 @@ namespace Quantum
 {
     public partial class RuntimeConfig
     {
-        public AssetRef<Asteroids.FightGameConfig> GameConfig;
+        public AssetRef<Fighting.FightGameConfig> GameConfig;
     }
 }

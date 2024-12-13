@@ -1,6 +1,6 @@
 using UnityEngine.Scripting;
 
-namespace Quantum.Asteroids
+namespace Quantum.Fighting
 {
     [Preserve]
     public unsafe class CharacterCollisionSystem : SystemSignalsOnly, ISignalOnTriggerEnter3D

@@ -1,8 +1,7 @@
 using Photon.Deterministic;
-using UnityEngine;
 using UnityEngine.Scripting;
 
-namespace Quantum.Asteroids
+namespace Quantum.Fighting
 {
     [Preserve]
     public unsafe class CharacterSpawnSystem : SystemSignalsOnly, ISignalOnPlayerAdded
@@ -35,8 +34,8 @@ namespace Quantum.Asteroids
                 Transform3D* transform3D = frame.Unsafe.GetPointer<Transform3D>(characterEntity);
                 PlayerCharacter* character = frame.Unsafe.GetPointer<PlayerCharacter>(characterEntity);
                 
-                character->PlayerHP = config.MaxHP;
                 frame.Global->CurrentPlayerCount++;
+                character->PlayerHP = config.MaxHP;
                 character->PlayerNumber = frame.Global->CurrentPlayerCount;
                 if (character->PlayerNumber == 1)
                 {
@@ -45,6 +44,7 @@ namespace Quantum.Asteroids
                 {
                     transform3D->Position = new FPVector3(FP._0, FP._0_01, FP._1_50);
                     transform3D->Rotation = FPQuaternion.Euler(FP._0, FP._180, FP._0);
+                    
                     frame.Global->IsGameStart = true;
                     frame.Events.GameStart(characterEntity);
                 }

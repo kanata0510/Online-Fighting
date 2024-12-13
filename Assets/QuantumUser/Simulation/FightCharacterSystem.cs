@@ -2,7 +2,7 @@ using Photon.Deterministic;
 using UnityEngine.Scripting;
 using UnityEngine;
 
-namespace Quantum.Asteroids
+namespace Quantum.Fighting
 {
     [Preserve]
     public unsafe class FightCharacterSystem : SystemMainThreadFilter<FightCharacterSystem.Filter>, ISignalOnCollisionCharacterHitPunch
@@ -100,20 +100,20 @@ namespace Quantum.Asteroids
         {
             Debug.Log("OnCollisionCharacterHitPunch");
             var config = f.FindAsset(f.RuntimeConfig.GameConfig);
-            
-            PhysicsBody3D* physicsBody3D = f.Unsafe.GetPointer<PhysicsBody3D>(info.Entity);
-            Transform3D* transform = f.Unsafe.GetPointer<Transform3D>(info.Entity);
-            physicsBody3D->AddLinearImpulse(transform->Back * config.PunchPower);
-            character->PlayerHP -= config.PunchDamage;
-            f.Events.Damage(*character, config.MaxHP);
-            if (character->PlayerHP <= FP._0)
+            Debug.Log("PlayerNumber : "+character->PlayerNumber);
+            if (f.Unsafe.TryGetPointer(info.Entity, out PhysicsBody3D* physicsBody3D))
             {
-                AnimatorComponent* animatorComponent = f.Unsafe.GetPointer<AnimatorComponent>(info.Entity);
-                AnimatorComponent.SetBoolean(f, animatorComponent, "Punch", false);
-                AnimatorComponent.SetBoolean(f, animatorComponent, "Backward", false);
-                AnimatorComponent.SetBoolean(f, animatorComponent, "Forward", false);
-                f.Global->IsGameEnd = true;
-                f.Events.GameEnd(character->PlayerNumber);
+                if (f.Unsafe.TryGetPointer(info.Entity, out Transform3D* transform))
+                {
+                    physicsBody3D->AddLinearImpulse(transform->Back * config.PunchPower);
+                    character->PlayerHP -= config.PunchDamage;
+                    f.Events.Damage(*character, config.MaxHP);
+                    if (character->PlayerHP <= FP._0)
+                    {
+                        f.Global->IsGameEnd = true;
+                        f.Events.GameEnd(character->PlayerNumber);
+                    }
+                }
             }
         }
     }
