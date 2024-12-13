@@ -54,7 +54,7 @@ MonoBehaviour:
       X:
         RawValue: 0
       Y:
-        RawValue: 0
+        RawValue: -6553
       Z:
         RawValue: 0
     PhysicsMaterial:
@@ -84,6 +84,94 @@ MonoBehaviour:
           Value: 0
       IsTrigger: 0
       ColliderIndex: 0
+      MutableMode: 0
+  - Rotation:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
+      W:
+        RawValue: 65536
+    Position:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 98304
+      Z:
+        RawValue: -294912
+    PhysicsMaterial:
+      Id:
+        Value: 0
+    ShapeType: 2
+    SphereRadius:
+      RawValue: 0
+    CapsuleRadius:
+      RawValue: 0
+    CapsuleHeight:
+      RawValue: 0
+    BoxExtents:
+      X:
+        RawValue: 32768
+      Y:
+        RawValue: 98304
+      Z:
+        RawValue: 32768
+    SmoothSphereMeshCollisions: 0
+    StaticData:
+      Name: WallStaticCollider
+      Tag: Untagged
+      Layer: 0
+      Asset:
+        Id:
+          Value: 0
+      IsTrigger: 0
+      ColliderIndex: 1
+      MutableMode: 0
+  - Rotation:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
+      W:
+        RawValue: 65536
+    Position:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 98304
+      Z:
+        RawValue: 294912
+    PhysicsMaterial:
+      Id:
+        Value: 0
+    ShapeType: 2
+    SphereRadius:
+      RawValue: 0
+    CapsuleRadius:
+      RawValue: 0
+    CapsuleHeight:
+      RawValue: 0
+    BoxExtents:
+      X:
+        RawValue: 32768
+      Y:
+        RawValue: 98304
+      Z:
+        RawValue: 32768
+    SmoothSphereMeshCollisions: 0
+    StaticData:
+      Name: WallStaticCollider (1)
+      Tag: Untagged
+      Layer: 0
+      Asset:
+        Id:
+          Value: 0
+      IsTrigger: 0
+      ColliderIndex: 2
       MutableMode: 0
   MapEntities: []
   SerializedTriangleDataUncompressedSize: 8

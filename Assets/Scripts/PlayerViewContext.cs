@@ -12,8 +12,17 @@ namespace Quantum {
             public TextMeshProUGUI nameLabel;
             public Image slider;
         }
+        public View[] players;
 
-        public View player1;
-        public View player2;
+        public Animator startAnimator;
+        public TextMeshProUGUI waitingText;
+        public GameObject readyText;
+        public GameObject fightText;
+        
+        public Animator endAnimator;
+        public GameObject endText;
+        public TextMeshProUGUI winnerText;
+
+        public GameObject returnMenuButton;
     }
 }

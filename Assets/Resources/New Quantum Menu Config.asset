@@ -17,18 +17,8 @@ MonoBehaviour:
   _availableAppVersions:
   - 1.0
   _availableRegions:
-  - 
   - asia
-  - au
-  - eu
-  - in
-  - hk
-  - jp
-  - za
-  - sa
-  - kr
-  - us
-  - usw
+  - 
   _availableScenes:
   - Name: QuantumGameScene
     ScenePath: Assets/QuantumUser/Scenes/QuantumGameScene.unity

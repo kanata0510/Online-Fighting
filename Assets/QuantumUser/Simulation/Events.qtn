@@ -1,0 +1,15 @@
+event Damage
+{
+    PlayerCharacter Character;
+    Int32 MaxHP;
+}
+
+event GameEnd
+{
+    Int32 LoseCharacterNumber;
+}
+
+event GameStart
+{
+    entity_ref PlayerEntity;
+}

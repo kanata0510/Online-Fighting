@@ -3,7 +3,7 @@ namespace Quantum
     using Photon.Deterministic;
     using UnityEngine;
 
-    public class AsteroidsInput : MonoBehaviour
+    public class FightGameInput : MonoBehaviour
     {
         private void OnEnable()
         {

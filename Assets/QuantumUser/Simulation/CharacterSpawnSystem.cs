@@ -1,4 +1,5 @@
 using Photon.Deterministic;
+using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace Quantum.Asteroids
@@ -23,6 +24,9 @@ namespace Quantum.Asteroids
                 var config = frame.FindAsset(frame.RuntimeConfig.GameConfig);
                 var targetEntity = frame.Create(config.PunchColliderPrototype);
                 
+                PhysicsCollider3D* physicsCollider3D = frame.Unsafe.GetPointer<PhysicsCollider3D>(targetEntity);
+                physicsCollider3D->Enabled = false;
+                
                 frame.Add(characterEntity, new PunchRef { Target = targetEntity });
                 
                 frame.Global->PunchRecoveryMaxTime = config.PunchRecoveryTime;
@@ -32,9 +36,8 @@ namespace Quantum.Asteroids
                 PlayerCharacter* character = frame.Unsafe.GetPointer<PlayerCharacter>(characterEntity);
                 
                 character->PlayerHP = config.MaxHP;
-                frame.Global->PlayerCount++;
-                character->PlayerNumber = frame.Global->PlayerCount;
-                
+                frame.Global->CurrentPlayerCount++;
+                character->PlayerNumber = frame.Global->CurrentPlayerCount;
                 if (character->PlayerNumber == 1)
                 {
                     transform3D->Position = new FPVector3(FP._0, FP._0_01, -FP._1_50);
@@ -42,6 +45,8 @@ namespace Quantum.Asteroids
                 {
                     transform3D->Position = new FPVector3(FP._0, FP._0_01, FP._1_50);
                     transform3D->Rotation = FPQuaternion.Euler(FP._0, FP._180, FP._0);
+                    frame.Global->IsGameStart = true;
+                    frame.Events.GameStart(characterEntity);
                 }
             }
         }

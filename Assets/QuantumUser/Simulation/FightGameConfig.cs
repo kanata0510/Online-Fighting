@@ -12,5 +12,8 @@ namespace Quantum.Asteroids
         public FP PunchPower = FP._1;
         public Int32 MaxHP = 100;
         public Int32 PunchDamage = 40;
+
+        public Int32 Player1HP;
+        public Int32 Player2HP;
     }
 }

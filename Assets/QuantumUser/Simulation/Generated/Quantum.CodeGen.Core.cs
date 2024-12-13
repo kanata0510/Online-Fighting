@@ -721,7 +721,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct _globals_ {
-    public const Int32 SIZE = 872;
+    public const Int32 SIZE = 888;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     public AssetRef<Map> Map;
@@ -748,12 +748,20 @@ namespace Quantum {
     private fixed Byte _input_[288];
     [FieldOffset(840)]
     public BitSet6 PlayerLastConnectionState;
-    [FieldOffset(864)]
+    [FieldOffset(872)]
     public FP PunchRecoveryMaxTime;
-    [FieldOffset(856)]
+    [FieldOffset(864)]
     public FP PunchAnimationRecoveryMaxTime;
     [FieldOffset(848)]
-    public Int32 PlayerCount;
+    public Int32 CurrentPlayerCount;
+    [FieldOffset(852)]
+    public QBoolean IsGameEnd;
+    [FieldOffset(856)]
+    public QBoolean IsGameStart;
+    [FieldOffset(860)]
+    public QBoolean IsGameStartOnce;
+    [FieldOffset(880)]
+    public FP StartWaitTime;
     public FixedArray<Input> input {
       get {
         fixed (byte* p = _input_) { return new FixedArray<Input>(p, 48, 6); }
@@ -776,7 +784,11 @@ namespace Quantum {
         hash = hash * 31 + PlayerLastConnectionState.GetHashCode();
         hash = hash * 31 + PunchRecoveryMaxTime.GetHashCode();
         hash = hash * 31 + PunchAnimationRecoveryMaxTime.GetHashCode();
-        hash = hash * 31 + PlayerCount.GetHashCode();
+        hash = hash * 31 + CurrentPlayerCount.GetHashCode();
+        hash = hash * 31 + IsGameEnd.GetHashCode();
+        hash = hash * 31 + IsGameStart.GetHashCode();
+        hash = hash * 31 + IsGameStartOnce.GetHashCode();
+        hash = hash * 31 + StartWaitTime.GetHashCode();
         return hash;
       }
     }
@@ -794,9 +806,13 @@ namespace Quantum {
         serializer.Stream.Serialize(&p->PlayerConnectedCount);
         FixedArray.Serialize(p->input, serializer, Statics.SerializeInput);
         Quantum.BitSet6.Serialize(&p->PlayerLastConnectionState, serializer);
-        serializer.Stream.Serialize(&p->PlayerCount);
+        serializer.Stream.Serialize(&p->CurrentPlayerCount);
+        QBoolean.Serialize(&p->IsGameEnd, serializer);
+        QBoolean.Serialize(&p->IsGameStart, serializer);
+        QBoolean.Serialize(&p->IsGameStartOnce, serializer);
         FP.Serialize(&p->PunchAnimationRecoveryMaxTime, serializer);
         FP.Serialize(&p->PunchRecoveryMaxTime, serializer);
+        FP.Serialize(&p->StartWaitTime, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]

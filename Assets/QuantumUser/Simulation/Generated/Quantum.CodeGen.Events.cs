@@ -52,7 +52,7 @@ namespace Quantum {
   public unsafe partial class Frame {
     public unsafe partial struct FrameEvents {
       static partial void GetEventTypeCountCodeGen(ref Int32 eventCount) {
-        eventCount = 1;
+        eventCount = 4;
       }
       static partial void GetParentEventIDCodeGen(Int32 eventID, ref Int32 parentEventID) {
         switch (eventID) {
@@ -61,8 +61,107 @@ namespace Quantum {
       }
       static partial void GetEventTypeCodeGen(Int32 eventID, ref System.Type result) {
         switch (eventID) {
+          case EventDamage.ID: result = typeof(EventDamage); return;
+          case EventGameEnd.ID: result = typeof(EventGameEnd); return;
+          case EventGameStart.ID: result = typeof(EventGameStart); return;
           default: break;
         }
+      }
+      public EventDamage Damage(PlayerCharacter Character, Int32 MaxHP) {
+        var ev = _f.Context.AcquireEvent<EventDamage>(EventDamage.ID);
+        ev.Character = Character;
+        ev.MaxHP = MaxHP;
+        _f.AddEvent(ev);
+        return ev;
+      }
+      public EventGameEnd GameEnd(Int32 LoseCharacterNumber) {
+        var ev = _f.Context.AcquireEvent<EventGameEnd>(EventGameEnd.ID);
+        ev.LoseCharacterNumber = LoseCharacterNumber;
+        _f.AddEvent(ev);
+        return ev;
+      }
+      public EventGameStart GameStart(EntityRef PlayerEntity) {
+        var ev = _f.Context.AcquireEvent<EventGameStart>(EventGameStart.ID);
+        ev.PlayerEntity = PlayerEntity;
+        _f.AddEvent(ev);
+        return ev;
+      }
+    }
+  }
+  public unsafe partial class EventDamage : EventBase {
+    public new const Int32 ID = 1;
+    public PlayerCharacter Character;
+    public Int32 MaxHP;
+    protected EventDamage(Int32 id, EventFlags flags) : 
+        base(id, flags) {
+    }
+    public EventDamage() : 
+        base(1, EventFlags.Server|EventFlags.Client) {
+    }
+    public new QuantumGame Game {
+      get {
+        return (QuantumGame)base.Game;
+      }
+      set {
+        base.Game = value;
+      }
+    }
+    public override Int32 GetHashCode() {
+      unchecked {
+        var hash = 41;
+        hash = hash * 31 + Character.GetHashCode();
+        hash = hash * 31 + MaxHP.GetHashCode();
+        return hash;
+      }
+    }
+  }
+  public unsafe partial class EventGameEnd : EventBase {
+    public new const Int32 ID = 2;
+    public Int32 LoseCharacterNumber;
+    protected EventGameEnd(Int32 id, EventFlags flags) : 
+        base(id, flags) {
+    }
+    public EventGameEnd() : 
+        base(2, EventFlags.Server|EventFlags.Client) {
+    }
+    public new QuantumGame Game {
+      get {
+        return (QuantumGame)base.Game;
+      }
+      set {
+        base.Game = value;
+      }
+    }
+    public override Int32 GetHashCode() {
+      unchecked {
+        var hash = 43;
+        hash = hash * 31 + LoseCharacterNumber.GetHashCode();
+        return hash;
+      }
+    }
+  }
+  public unsafe partial class EventGameStart : EventBase {
+    public new const Int32 ID = 3;
+    public EntityRef PlayerEntity;
+    protected EventGameStart(Int32 id, EventFlags flags) : 
+        base(id, flags) {
+    }
+    public EventGameStart() : 
+        base(3, EventFlags.Server|EventFlags.Client) {
+    }
+    public new QuantumGame Game {
+      get {
+        return (QuantumGame)base.Game;
+      }
+      set {
+        base.Game = value;
+      }
+    }
+    public override Int32 GetHashCode() {
+      unchecked {
+        var hash = 47;
+        hash = hash * 31 + PlayerEntity.GetHashCode();
+        return hash;
       }
     }
   }

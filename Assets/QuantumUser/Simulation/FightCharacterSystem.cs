@@ -19,6 +19,14 @@ namespace Quantum.Asteroids
 
         public override void Update(Frame f, ref Filter filter)
         {
+            if (f.Global->IsGameEnd) return;
+            if (f.Global->StartWaitTime > FP._0)
+            {
+                Debug.Log("waiting");
+                f.Global->StartWaitTime = f.Global->StartWaitTime - f.DeltaTime < FP._0 ? FP._0 : f.Global->StartWaitTime - f.DeltaTime;
+                return;
+            }
+            
             Input* input = default;
             if(f.Unsafe.TryGetPointer(filter.Entity, out PlayerLink* playerLink))
             {
@@ -26,9 +34,35 @@ namespace Quantum.Asteroids
             }
 
             UpdateCharacterMovement(f, ref filter, input);
+
+            if (f.Global->IsGameStart && !f.Global->IsGameStartOnce)
+            {
+                f.Global->IsGameStartOnce = true;
+                f.Global->StartWaitTime = FP._4;
+                Transform3D* transform = f.Unsafe.GetPointer<Transform3D>(filter.Entity);
+                transform->Teleport(f, new FPVector3(FP._0, FP._0_01, -FP._1_50));
+            }
+            
+            UpdateCharacterPunch(f, ref filter, input);
         }
 
         private void UpdateCharacterMovement(Frame f, ref Filter filter, Input* input)
+        {
+            FP turnSpeed = 1;
+            AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Backward", input->Left);
+            if (input->Left)
+            {
+                filter.Transform->Position = new FPVector3(0, filter.Transform->Position.Y, filter.Transform->Position.Z - turnSpeed * f.DeltaTime);
+            }
+
+            AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Forward", input->Right);
+            if (input->Right)
+            {
+                filter.Transform->Position = new FPVector3(0, filter.Transform->Position.Y, filter.Transform->Position.Z + turnSpeed * f.DeltaTime);
+            }
+        }
+        
+        private void UpdateCharacterPunch(Frame f, ref Filter filter, Input* input)
         {
             PunchRef* punch = f.Unsafe.GetPointer<PunchRef>(filter.Entity);
             PhysicsCollider3D* punchCollider = f.Unsafe.GetPointer<PhysicsCollider3D>(punch->Target);
@@ -47,30 +81,18 @@ namespace Quantum.Asteroids
 
             if (input->Fire && punch->RecoveryTime == FP._0)
             {
-                Debug.Log("Punch");
                 Transform3D* punchTransform = f.Unsafe.GetPointer<Transform3D>(punch->Target);
                 punchTransform->Teleport(f,
                     filter.Transform->Position + filter.Transform->Forward * FP._0_50 +
                     filter.Transform->Up * FP._1_10);
-                punchCollider->Enabled = true;
+                if (f.Global->IsGameStart)
+                {
+                    punchCollider->Enabled = true;
+                }
                 
                 punch->RecoveryTime = f.Global->PunchRecoveryMaxTime;
                 punch->AnimationRecoveryTime = f.Global->PunchAnimationRecoveryMaxTime;
                 AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", true);
-                return;
-            }
-            
-            FP turnSpeed = 1;
-            AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Backward", input->Left);
-            if (input->Left)
-            {
-                filter.Transform->Position += FPVector3.Back * turnSpeed * f.DeltaTime;
-            }
-
-            AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Forward", input->Right);
-            if (input->Right)
-            {
-                filter.Transform->Position += FPVector3.Forward * turnSpeed * f.DeltaTime;
             }
         }
         
@@ -83,6 +105,16 @@ namespace Quantum.Asteroids
             Transform3D* transform = f.Unsafe.GetPointer<Transform3D>(info.Entity);
             physicsBody3D->AddLinearImpulse(transform->Back * config.PunchPower);
             character->PlayerHP -= config.PunchDamage;
+            f.Events.Damage(*character, config.MaxHP);
+            if (character->PlayerHP <= FP._0)
+            {
+                AnimatorComponent* animatorComponent = f.Unsafe.GetPointer<AnimatorComponent>(info.Entity);
+                AnimatorComponent.SetBoolean(f, animatorComponent, "Punch", false);
+                AnimatorComponent.SetBoolean(f, animatorComponent, "Backward", false);
+                AnimatorComponent.SetBoolean(f, animatorComponent, "Forward", false);
+                f.Global->IsGameEnd = true;
+                f.Events.GameEnd(character->PlayerNumber);
+            }
         }
     }
 }
