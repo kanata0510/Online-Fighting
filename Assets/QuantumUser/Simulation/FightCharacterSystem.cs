@@ -1,6 +1,5 @@
 using Photon.Deterministic;
 using UnityEngine.Scripting;
-using UnityEngine;
 
 namespace Quantum.Fighting
 {
@@ -22,7 +21,6 @@ namespace Quantum.Fighting
             if (f.Global->IsGameEnd) return;
             if (f.Global->StartWaitTime > FP._0)
             {
-                Debug.Log("waiting");
                 f.Global->StartWaitTime = f.Global->StartWaitTime - f.DeltaTime < FP._0 ? FP._0 : f.Global->StartWaitTime - f.DeltaTime;
                 return;
             }
@@ -98,9 +96,7 @@ namespace Quantum.Fighting
         
         public void OnCollisionCharacterHitPunch(Frame f, TriggerInfo3D info, PlayerCharacter* character, Punch* punch)
         {
-            Debug.Log("OnCollisionCharacterHitPunch");
             var config = f.FindAsset(f.RuntimeConfig.GameConfig);
-            Debug.Log("PlayerNumber : "+character->PlayerNumber);
             if (f.Unsafe.TryGetPointer(info.Entity, out PhysicsBody3D* physicsBody3D))
             {
                 if (f.Unsafe.TryGetPointer(info.Entity, out Transform3D* transform))
