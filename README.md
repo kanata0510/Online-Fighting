@@ -1,7 +1,7 @@
 # Online Fighting
 
 Photon Quantum 3を使用した格闘ゲームです。  
-ビルド：https://drive.google.com/file/d/1MTc_82tsHz4oiFnjFPgsvsbig8eHjMOI/view
+Build for Windows：https://drive.google.com/file/d/1MTc_82tsHz4oiFnjFPgsvsbig8eHjMOI/view
 
 
 
