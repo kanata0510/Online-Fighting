@@ -1,7 +1,9 @@
-## Online Fighting
+# Online Fighting
 
-# Photon Quantum 3を使用した格闘ゲームです。
+Photon Quantum 3を使用した格闘ゲームです。  
 ビルド：https://drive.google.com/file/d/1MTc_82tsHz4oiFnjFPgsvsbig8eHjMOI/view
+
+
 
 © UTJ/UCL  
 
