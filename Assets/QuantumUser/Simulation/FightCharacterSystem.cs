@@ -4,7 +4,7 @@ using UnityEngine.Scripting;
 namespace Quantum.Fighting
 {
     [Preserve]
-    public unsafe class FightCharacterSystem : SystemMainThreadFilter<FightCharacterSystem.Filter>, ISignalOnCollisionCharacterHitPunch
+    public unsafe class FightCharacterSystem : SystemMainThreadFilter<FightCharacterSystem.Filter>//, ISignalOnCollisionCharacterHitPunch
     {
         public struct Filter
         {
@@ -64,25 +64,26 @@ namespace Quantum.Fighting
         {
             PunchRef* punch = f.Unsafe.GetPointer<PunchRef>(filter.Entity);
             PhysicsCollider3D* punchCollider = f.Unsafe.GetPointer<PhysicsCollider3D>(punch->Target);
-            if (punchCollider->Enabled)
-            {
-                punchCollider->Enabled = false;
-            }
             punch->RecoveryTime = punch->RecoveryTime - f.DeltaTime < FP._0 ? FP._0 : punch->RecoveryTime - f.DeltaTime;
             punch->AnimationRecoveryTime = punch->AnimationRecoveryTime - f.DeltaTime < FP._0
                 ? FP._0
                 : punch->AnimationRecoveryTime - f.DeltaTime;
             if (punch->AnimationRecoveryTime == FP._0)
             {
+                if (punchCollider->Enabled)
+                {
+                    punchCollider->Enabled = false;
+                }
                 AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", false);
             }
 
             if (input->Fire && punch->RecoveryTime == FP._0)
             {
                 Transform3D* punchTransform = f.Unsafe.GetPointer<Transform3D>(punch->Target);
-                punchTransform->Teleport(f,
-                    filter.Transform->Position + filter.Transform->Forward * FP._0_50 +
-                    filter.Transform->Up * FP._1_10);
+                FPVector3 punchPosition = filter.Transform->Position + filter.Transform->Forward * FP._0_50 +
+                                          filter.Transform->Up * FP._1_10;
+                punchTransform->Position = punchPosition;
+                punchTransform->Teleport(f, punchPosition);
                 if (f.Global->IsGameStart)
                 {
                     punchCollider->Enabled = true;
@@ -91,25 +92,6 @@ namespace Quantum.Fighting
                 punch->RecoveryTime = f.Global->PunchRecoveryMaxTime;
                 punch->AnimationRecoveryTime = f.Global->PunchAnimationRecoveryMaxTime;
                 AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", true);
-            }
-        }
-        
-        public void OnCollisionCharacterHitPunch(Frame f, TriggerInfo3D info, PlayerCharacter* character, Punch* punch)
-        {
-            var config = f.FindAsset(f.RuntimeConfig.GameConfig);
-            if (f.Unsafe.TryGetPointer(info.Entity, out PhysicsBody3D* physicsBody3D))
-            {
-                if (f.Unsafe.TryGetPointer(info.Entity, out Transform3D* transform))
-                {
-                    physicsBody3D->AddLinearImpulse(transform->Back * config.PunchPower);
-                    character->PlayerHP -= config.PunchDamage;
-                    f.Events.Damage(*character, config.MaxHP);
-                    if (character->PlayerHP <= FP._0)
-                    {
-                        f.Global->IsGameEnd = true;
-                        f.Events.GameEnd(character->PlayerNumber);
-                    }
-                }
             }
         }
     }

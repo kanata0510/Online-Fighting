@@ -1172,15 +1172,17 @@ namespace Quantum {
     public const Int32 SIZE = 4;
     public const Int32 ALIGNMENT = 4;
     [FieldOffset(0)]
-    private fixed Byte _alignment_padding_[4];
+    public Int32 PlayerNumber;
     public override Int32 GetHashCode() {
       unchecked { 
         var hash = 10253;
+        hash = hash * 31 + PlayerNumber.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (Punch*)ptr;
+        serializer.Stream.Serialize(&p->PlayerNumber);
     }
   }
   [StructLayout(LayoutKind.Explicit)]

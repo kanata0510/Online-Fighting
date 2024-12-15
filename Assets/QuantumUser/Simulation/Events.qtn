@@ -1,6 +1,6 @@
 event Damage
 {
-    PlayerCharacter Character;
+    entity_ref CharacterEntity;
     Int32 MaxHP;
 }
 

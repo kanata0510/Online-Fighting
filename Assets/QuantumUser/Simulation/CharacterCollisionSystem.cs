@@ -1,3 +1,5 @@
+using Photon.Deterministic;
+using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace Quantum.Fighting
@@ -9,7 +11,7 @@ namespace Quantum.Fighting
         {
             if (f.Unsafe.TryGetPointer<PlayerCharacter>(info.Entity, out var character))
             {
-                if (f.Unsafe.TryGetPointer<Punch>(info.Other, out var punch))
+                if (f.Unsafe.TryGetPointer<Punch>(info.Other, out var punch) && character->PlayerNumber != punch->PlayerNumber)
                 {
                     // Chara Hit Punch
                     f.Signals.OnCollisionCharacterHitPunch(info, character, punch);

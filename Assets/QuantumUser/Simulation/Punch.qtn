@@ -1,3 +1,4 @@
 component Punch
 {
+    Int32 PlayerNumber;
 }

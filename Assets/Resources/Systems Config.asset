@@ -66,3 +66,8 @@ MonoBehaviour:
     SystemName: 
     StartDisabled: 0
     Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.Fighting.FightDamageSystem, Quantum.Simulation
+    SystemName: 
+    StartDisabled: 0
+    Children: []

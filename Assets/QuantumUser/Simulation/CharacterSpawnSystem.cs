@@ -28,6 +28,7 @@ namespace Quantum.Fighting
                 
                 frame.Add(characterEntity, new PunchRef { Target = targetEntity });
                 
+                
                 frame.Global->PunchRecoveryMaxTime = config.PunchRecoveryTime;
                 frame.Global->PunchAnimationRecoveryMaxTime = config.PunchAnimationRecoveryTime;
                 
@@ -37,6 +38,8 @@ namespace Quantum.Fighting
                 frame.Global->CurrentPlayerCount++;
                 character->PlayerHP = config.MaxHP;
                 character->PlayerNumber = frame.Global->CurrentPlayerCount;
+                Punch* punch = frame.Unsafe.GetPointer<Punch>(targetEntity);
+                punch->PlayerNumber = character->PlayerNumber;
                 if (character->PlayerNumber == 1)
                 {
                     transform3D->Position = new FPVector3(FP._0, FP._0_01, -FP._1_50);
