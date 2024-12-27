@@ -394,7 +394,9 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Punch))]
   public unsafe partial class PunchPrototype : ComponentPrototype<Quantum.Punch> {
-    public Int32 PlayerNumber;
+    public FP RecoveryTime;
+    public FP AnimationRecoveryTime;
+    public AssetRef<PunchConfig> PunchConfig;
     partial void MaterializeUser(Frame frame, ref Quantum.Punch result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.Punch component = default;
@@ -402,25 +404,27 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.Punch result, in PrototypeMaterializationContext context = default) {
-        result.PlayerNumber = this.PlayerNumber;
+        result.RecoveryTime = this.RecoveryTime;
+        result.AnimationRecoveryTime = this.AnimationRecoveryTime;
+        result.PunchConfig = this.PunchConfig;
         MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.PunchRef))]
-  public unsafe class PunchRefPrototype : ComponentPrototype<Quantum.PunchRef> {
-    public MapEntityId Target;
-    public FP RecoveryTime;
-    public FP AnimationRecoveryTime;
+  public unsafe partial class PunchRefPrototype : ComponentPrototype<Quantum.PunchRef> {
+    public Int32 PlayerNumber;
+    public FP DestroyTime;
+    partial void MaterializeUser(Frame frame, ref Quantum.PunchRef result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.PunchRef component = default;
         Materialize((Frame)f, ref component, in context);
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.PunchRef result, in PrototypeMaterializationContext context = default) {
-        PrototypeValidator.FindMapEntity(this.Target, in context, out result.Target);
-        result.RecoveryTime = this.RecoveryTime;
-        result.AnimationRecoveryTime = this.AnimationRecoveryTime;
+        result.PlayerNumber = this.PlayerNumber;
+        result.DestroyTime = this.DestroyTime;
+        MaterializeUser(frame, ref result, in context);
     }
   }
 }

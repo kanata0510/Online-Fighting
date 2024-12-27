@@ -1,6 +1,5 @@
 component PunchRef
 {
-    EntityRef Target;
-    FP RecoveryTime;
-    FP AnimationRecoveryTime;
+    Int32 PlayerNumber;
+    FP DestroyTime;
 }

@@ -18,17 +18,15 @@ namespace Quantum {
     partial void CreatePrototypeUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.PunchRefPrototype prototype);
     [DrawInline()]
     [ReadOnly(InEditMode = false)]
-    public Quantum.Prototypes.Unity.PunchRefPrototype Prototype;
+    public Quantum.Prototypes.PunchRefPrototype Prototype;
     public override System.Type ComponentType {
       get {
         return typeof(Quantum.PunchRef);
       }
     }
     public override ComponentPrototype CreatePrototype(Quantum.QuantumEntityPrototypeConverter converter) {
-      Quantum.Prototypes.PunchRefPrototype result;
-      converter.Convert(Prototype, out result);
-      CreatePrototypeUser(converter, ref result);
-      return result;
+      CreatePrototypeUser(converter, ref Prototype);
+      return Prototype;
     }
   }
 }

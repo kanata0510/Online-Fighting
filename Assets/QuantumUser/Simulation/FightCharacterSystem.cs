@@ -14,6 +14,7 @@ namespace Quantum.Fighting
             public PhysicsCollider3D* PhysicsCollider3D;
             public AnimatorComponent* AnimatorComponent;
             public PlayerCharacter* PlayerCharacter;
+            public Punch* Punch;
         }
 
         public override void Update(Frame f, ref Filter filter)
@@ -37,8 +38,7 @@ namespace Quantum.Fighting
             {
                 f.Global->IsGameStartOnce = true;
                 f.Global->StartWaitTime = FP._4;
-                Transform3D* transform = f.Unsafe.GetPointer<Transform3D>(filter.Entity);
-                transform->Teleport(f, new FPVector3(FP._0, FP._0_01, -FP._1_50));
+                filter.Transform->Teleport(f, new FPVector3(FP._0, FP._0_01, -FP._1_50));
             }
             
             UpdateCharacterPunch(f, ref filter, input);
@@ -62,32 +62,24 @@ namespace Quantum.Fighting
         
         private void UpdateCharacterPunch(Frame f, ref Filter filter, Input* input)
         {
-            PunchRef* punch = f.Unsafe.GetPointer<PunchRef>(filter.Entity);
-            PhysicsCollider3D* punchCollider = f.Unsafe.GetPointer<PhysicsCollider3D>(punch->Target);
+            Punch* punch = filter.Punch;
             punch->RecoveryTime = punch->RecoveryTime - f.DeltaTime < FP._0 ? FP._0 : punch->RecoveryTime - f.DeltaTime;
             punch->AnimationRecoveryTime = punch->AnimationRecoveryTime - f.DeltaTime < FP._0
                 ? FP._0
                 : punch->AnimationRecoveryTime - f.DeltaTime;
+            
             if (punch->AnimationRecoveryTime == FP._0)
             {
-                if (punchCollider->Enabled)
-                {
-                    punchCollider->Enabled = false;
-                }
                 AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", false);
             }
 
             if (input->Fire && punch->RecoveryTime == FP._0)
             {
-                Transform3D* punchTransform = f.Unsafe.GetPointer<Transform3D>(punch->Target);
                 FPVector3 punchPosition = filter.Transform->Position + filter.Transform->Forward * FP._0_50 +
                                           filter.Transform->Up * FP._1_10;
-                punchTransform->Position = punchPosition;
-                punchTransform->Teleport(f, punchPosition);
-                if (f.Global->IsGameStart)
-                {
-                    punchCollider->Enabled = true;
-                }
+                
+                var config = f.FindAsset(filter.Punch->PunchConfig);
+                f.Signals.PlayerPunch(filter.Entity, punchPosition, config.PunchPrototype);
                 
                 punch->RecoveryTime = f.Global->PunchRecoveryMaxTime;
                 punch->AnimationRecoveryTime = f.Global->PunchAnimationRecoveryMaxTime;

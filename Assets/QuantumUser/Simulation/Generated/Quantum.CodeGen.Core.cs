@@ -721,7 +721,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct _globals_ {
-    public const Int32 SIZE = 888;
+    public const Int32 SIZE = 896;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     public AssetRef<Map> Map;
@@ -748,10 +748,12 @@ namespace Quantum {
     private fixed Byte _input_[288];
     [FieldOffset(840)]
     public BitSet6 PlayerLastConnectionState;
-    [FieldOffset(872)]
+    [FieldOffset(880)]
     public FP PunchRecoveryMaxTime;
     [FieldOffset(864)]
     public FP PunchAnimationRecoveryMaxTime;
+    [FieldOffset(872)]
+    public FP PunchDestroyTime;
     [FieldOffset(848)]
     public Int32 CurrentPlayerCount;
     [FieldOffset(852)]
@@ -760,7 +762,7 @@ namespace Quantum {
     public QBoolean IsGameStart;
     [FieldOffset(860)]
     public QBoolean IsGameStartOnce;
-    [FieldOffset(880)]
+    [FieldOffset(888)]
     public FP StartWaitTime;
     public FixedArray<Input> input {
       get {
@@ -784,6 +786,7 @@ namespace Quantum {
         hash = hash * 31 + PlayerLastConnectionState.GetHashCode();
         hash = hash * 31 + PunchRecoveryMaxTime.GetHashCode();
         hash = hash * 31 + PunchAnimationRecoveryMaxTime.GetHashCode();
+        hash = hash * 31 + PunchDestroyTime.GetHashCode();
         hash = hash * 31 + CurrentPlayerCount.GetHashCode();
         hash = hash * 31 + IsGameEnd.GetHashCode();
         hash = hash * 31 + IsGameStart.GetHashCode();
@@ -811,6 +814,7 @@ namespace Quantum {
         QBoolean.Serialize(&p->IsGameStart, serializer);
         QBoolean.Serialize(&p->IsGameStartOnce, serializer);
         FP.Serialize(&p->PunchAnimationRecoveryMaxTime, serializer);
+        FP.Serialize(&p->PunchDestroyTime, serializer);
         FP.Serialize(&p->PunchRecoveryMaxTime, serializer);
         FP.Serialize(&p->StartWaitTime, serializer);
     }
@@ -1169,55 +1173,63 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Punch : Quantum.IComponent {
-    public const Int32 SIZE = 4;
-    public const Int32 ALIGNMENT = 4;
+    public const Int32 SIZE = 24;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(16)]
+    public FP RecoveryTime;
+    [FieldOffset(8)]
+    public FP AnimationRecoveryTime;
     [FieldOffset(0)]
-    public Int32 PlayerNumber;
+    public AssetRef<PunchConfig> PunchConfig;
     public override Int32 GetHashCode() {
       unchecked { 
         var hash = 10253;
-        hash = hash * 31 + PlayerNumber.GetHashCode();
+        hash = hash * 31 + RecoveryTime.GetHashCode();
+        hash = hash * 31 + AnimationRecoveryTime.GetHashCode();
+        hash = hash * 31 + PunchConfig.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (Punch*)ptr;
-        serializer.Stream.Serialize(&p->PlayerNumber);
+        AssetRef.Serialize(&p->PunchConfig, serializer);
+        FP.Serialize(&p->AnimationRecoveryTime, serializer);
+        FP.Serialize(&p->RecoveryTime, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct PunchRef : Quantum.IComponent {
-    public const Int32 SIZE = 24;
+    public const Int32 SIZE = 16;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
-    public EntityRef Target;
-    [FieldOffset(16)]
-    public FP RecoveryTime;
+    public Int32 PlayerNumber;
     [FieldOffset(8)]
-    public FP AnimationRecoveryTime;
+    public FP DestroyTime;
     public override Int32 GetHashCode() {
       unchecked { 
         var hash = 8581;
-        hash = hash * 31 + Target.GetHashCode();
-        hash = hash * 31 + RecoveryTime.GetHashCode();
-        hash = hash * 31 + AnimationRecoveryTime.GetHashCode();
+        hash = hash * 31 + PlayerNumber.GetHashCode();
+        hash = hash * 31 + DestroyTime.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (PunchRef*)ptr;
-        EntityRef.Serialize(&p->Target, serializer);
-        FP.Serialize(&p->AnimationRecoveryTime, serializer);
-        FP.Serialize(&p->RecoveryTime, serializer);
+        serializer.Stream.Serialize(&p->PlayerNumber);
+        FP.Serialize(&p->DestroyTime, serializer);
     }
   }
   public unsafe partial interface ISignalOnCollisionCharacterHitPunch : ISignal {
-    void OnCollisionCharacterHitPunch(Frame f, TriggerInfo3D info, PlayerCharacter* character, Punch* punch);
+    void OnCollisionCharacterHitPunch(Frame f, TriggerInfo3D info, PlayerCharacter* character, PunchRef* punch);
+  }
+  public unsafe partial interface ISignalPlayerPunch : ISignal {
+    void PlayerPunch(Frame f, EntityRef owner, FPVector3 spawnPosition, AssetRef<EntityPrototype> punchPrototype);
   }
   public static unsafe partial class Constants {
   }
   public unsafe partial class Frame {
     private ISignalOnCollisionCharacterHitPunch[] _ISignalOnCollisionCharacterHitPunchSystems;
+    private ISignalPlayerPunch[] _ISignalPlayerPunchSystems;
     partial void AllocGen() {
       _globals = (_globals_*)Context.Allocator.AllocAndClear(sizeof(_globals_));
     }
@@ -1230,6 +1242,7 @@ namespace Quantum {
     partial void InitGen() {
       Initialize(this, this.SimulationConfig.Entities, 256);
       _ISignalOnCollisionCharacterHitPunchSystems = BuildSignalsArray<ISignalOnCollisionCharacterHitPunch>();
+      _ISignalPlayerPunchSystems = BuildSignalsArray<ISignalPlayerPunch>();
       _ComponentSignalsOnAdded = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
       _ComponentSignalsOnRemoved = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
       BuildSignalsArrayOnComponentAdded<Quantum.AnimatorComponent>();
@@ -1307,12 +1320,21 @@ namespace Quantum {
       Physics3D.Init(_globals->PhysicsState3D.MapStaticCollidersState.TrackedMap);
     }
     public unsafe partial struct FrameSignals {
-      public void OnCollisionCharacterHitPunch(TriggerInfo3D info, PlayerCharacter* character, Punch* punch) {
+      public void OnCollisionCharacterHitPunch(TriggerInfo3D info, PlayerCharacter* character, PunchRef* punch) {
         var array = _f._ISignalOnCollisionCharacterHitPunchSystems;
         for (Int32 i = 0; i < array.Length; ++i) {
           var s = array[i];
           if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
             s.OnCollisionCharacterHitPunch(_f, info, character, punch);
+          }
+        }
+      }
+      public void PlayerPunch(EntityRef owner, FPVector3 spawnPosition, AssetRef<EntityPrototype> punchPrototype) {
+        var array = _f._ISignalPlayerPunchSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.PlayerPunch(_f, owner, spawnPosition, punchPrototype);
           }
         }
       }

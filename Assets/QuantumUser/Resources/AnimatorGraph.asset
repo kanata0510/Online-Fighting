@@ -18,7 +18,7 @@ MonoBehaviour:
       Value: 356901390919957486
   IsValid: 1
   WeightTableResolution: 32
-  Controller: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
+  Controller: {fileID: 9100000, guid: a2a354cdc9066f54faeeaa7bdb80ec5e, type: 2}
   Clips:
   - {fileID: -3100369314251171874, guid: 12e52e465ed793a4d801955e9f964a82, type: 3}
   - {fileID: 1657602633327794031, guid: 8269a9f8cf495034c817722ac21f309f, type: 3}

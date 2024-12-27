@@ -1,4 +1,6 @@
 component Punch
 {
-    Int32 PlayerNumber;
+    FP RecoveryTime;
+    FP AnimationRecoveryTime;
+    AssetRef<PunchConfig> PunchConfig;
 }

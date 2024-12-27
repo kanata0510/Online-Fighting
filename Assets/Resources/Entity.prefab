@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -7863984893228538256}
   - component: {fileID: 886091114397486474}
   - component: {fileID: -4654307907260139799}
+  - component: {fileID: -5446137709488747134}
   m_Layer: 0
   m_Name: Entity
   m_TagString: Untagged
@@ -208,7 +209,7 @@ MonoBehaviour:
   BindBehaviour: 1
   ManualDisposal: 0
   ViewFlags: 0
-  InterpolationMode: 0
+  InterpolationMode: 2
   ErrorCorrectionRateMin: 3.3
   ErrorCorrectionRateMax: 10
   ErrorPositionBlendStart: 0.25
@@ -345,6 +346,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b404928167e457e45adc1b9da9aed9ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5446137709488747134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176199811940016233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35353c69da65c3e49bdddf3e6ff0e5b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    RecoveryTime:
+      RawValue: 32768
+    AnimationRecoveryTime:
+      RawValue: 13107
+    PunchConfig:
+      Id:
+        Value: 453708027477918063
 --- !u!1001 &3764717402613422339
 PrefabInstance:
   m_ObjectHideFlags: 0

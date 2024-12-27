@@ -37,7 +37,7 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
 
     private void PlayerAdded(EntityRef addPlayerEntity)
     {
-        var frame = QuantumRunner.Default.Game.Frames.Predicted;
+        var frame = QuantumRunner.Default.Game.Frames.Verified;
         var player = frame.Get<PlayerLink>(addPlayerEntity).PlayerRef;
         if (frame.TryGet(addPlayerEntity, out PlayerCharacter character))
         {
@@ -66,7 +66,7 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
     
     private void OnDamage(EventDamage eventDamage)
     {
-        var frame = QuantumRunner.Default.Game.Frames.Predicted;
+        var frame = QuantumRunner.Default.Game.Frames.Verified;
         var character = frame.Get<PlayerCharacter>(eventDamage.CharacterEntity);
         int playerIndex = character.PlayerNumber - 1;
         ViewContext.players[playerIndex].slider.fillAmount = character.PlayerHP.AsFloat / eventDamage.MaxHP;
@@ -84,7 +84,7 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
         yield return new WaitForSeconds(2);
         ViewContext.endText.SetActive(false);
         
-        var frame = QuantumRunner.Default.Game.Frames.Predicted;
+        var frame = QuantumRunner.Default.Game.Frames.Verified;
         int winnerCharacterNumber = 2 - loseCharacterNumber;
         string playerName = frame.GetPlayerData(winnerCharacterNumber).PlayerNickname;
         ViewContext.winnerText.text = $"{playerName}\n<size=160>WIN</size>";

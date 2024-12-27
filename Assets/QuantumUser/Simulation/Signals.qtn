@@ -1,1 +1,2 @@
-signal OnCollisionCharacterHitPunch(TriggerInfo3D info, PlayerCharacter* character, Punch* punch);
+signal OnCollisionCharacterHitPunch(TriggerInfo3D info, PlayerCharacter* character, PunchRef* punch);
+signal PlayerPunch(EntityRef owner, FPVector3 spawnPosition, AssetRef<EntityPrototype> punchPrototype);

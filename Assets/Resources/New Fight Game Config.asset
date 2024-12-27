@@ -16,13 +16,12 @@ MonoBehaviour:
     Path: Resources/New Fight Game Config
     Guid:
       Value: 481706877361051826
-  PunchColliderPrototype:
-    Id:
-      Value: 1465063172171457746
   PunchRecoveryTime:
     RawValue: 32768
   PunchAnimationRecoveryTime:
     RawValue: 13107
+  PunchDestroyTime:
+    RawValue: 6554
   PunchPower:
     RawValue: 327680
   MaxHP: 100

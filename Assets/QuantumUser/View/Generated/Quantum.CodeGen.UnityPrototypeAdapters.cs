@@ -188,21 +188,6 @@ namespace Quantum.Prototypes.Unity {
       return result;
     }
   }
-  [System.SerializableAttribute()]
-  public unsafe partial class PunchRefPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.PunchRefPrototype> {
-    public Quantum.QuantumEntityPrototype Target;
-    public FP RecoveryTime;
-    public FP AnimationRecoveryTime;
-    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.PunchRefPrototype prototype);
-    public override Quantum.Prototypes.PunchRefPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
-      var result = new Quantum.Prototypes.PunchRefPrototype();
-      converter.Convert(this.Target, out result.Target);
-      converter.Convert(this.RecoveryTime, out result.RecoveryTime);
-      converter.Convert(this.AnimationRecoveryTime, out result.AnimationRecoveryTime);
-      ConvertUser(converter, ref result);
-      return result;
-    }
-  }
 }
 #pragma warning restore 0109
 #pragma warning restore 1591

@@ -11,8 +11,10 @@ namespace Quantum.Fighting
         {
             if (f.Unsafe.TryGetPointer<PlayerCharacter>(info.Entity, out var character))
             {
-                if (f.Unsafe.TryGetPointer<Punch>(info.Other, out var punch) && character->PlayerNumber != punch->PlayerNumber)
+                Debug.Log("character : "+character->PlayerNumber);
+                if (f.Unsafe.TryGetPointer<PunchRef>(info.Other, out var punch) && character->PlayerNumber != punch->PlayerNumber)
                 {
+                    Debug.Log("punch : "+punch->PlayerNumber);
                     // Chara Hit Punch
                     f.Signals.OnCollisionCharacterHitPunch(info, character, punch);
                 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4878203438958974054}
   - component: {fileID: 4166732475755787254}
   - component: {fileID: 3462376006741684348}
-  - component: {fileID: 4729864873606194770}
+  - component: {fileID: 7329396381009071085}
   m_Layer: 0
   m_Name: BoxEntity
   m_TagString: Untagged
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0008c51fe3af00b4da5d44f02d9b3dff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BindBehaviour: 0
+  BindBehaviour: 1
   ManualDisposal: 0
   ViewFlags: 0
   InterpolationMode: 0
@@ -219,7 +219,7 @@ MonoBehaviour:
   OnEntityDestroyed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4729864873606194770
+--- !u!114 &7329396381009071085
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -228,8 +228,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5685812618877896474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35353c69da65c3e49bdddf3e6ff0e5b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 00d334218c7aa2c40b666fe50e37d382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    _empty_prototype_dummy_field_: 0
+    PlayerNumber: 0
+    DestroyTime:
+      RawValue: 0
