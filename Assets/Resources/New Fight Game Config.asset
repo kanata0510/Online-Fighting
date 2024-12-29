@@ -16,8 +16,101 @@ MonoBehaviour:
     Path: Resources/New Fight Game Config
     Guid:
       Value: 481706877361051826
+  Curve:
+    Samples:
+    - RawValue: 0
+    - RawValue: 20480
+    - RawValue: 40960
+    - RawValue: 61440
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 65536
+    - RawValue: 61430
+    - RawValue: 40904
+    - RawValue: 20378
+    - RawValue: 0
+    PreWrapMode: 0
+    PostWrapMode: 0
+    StartTime:
+      RawValue: 0
+    EndTime:
+      RawValue: 65536
+    Resolution: 32
+    OriginalPreWrapMode: 0
+    OriginalPostWrapMode: 0
+    Keys:
+    - Time:
+        RawValue: 0
+      Value:
+        RawValue: 0
+      InTangent:
+        RawValue: 0
+      OutTangent:
+        RawValue: 655360
+      TangentMode: 0
+      TangentModeLeft: 0
+      TangentModeRight: 2
+      WeightedMode: 0
+    - Time:
+        RawValue: 6553
+      Value:
+        RawValue: 65536
+      InTangent:
+        RawValue: 655360
+      OutTangent:
+        RawValue: 0
+      TangentMode: 0
+      TangentModeLeft: 2
+      TangentModeRight: 0
+      WeightedMode: 0
+    - Time:
+        RawValue: 58982
+      Value:
+        RawValue: 65536
+      InTangent:
+        RawValue: 0
+      OutTangent:
+        RawValue: -656839
+      TangentMode: 0
+      TangentModeLeft: 0
+      TangentModeRight: 2
+      WeightedMode: 0
+    - Time:
+        RawValue: 65536
+      Value:
+        RawValue: -148
+      InTangent:
+        RawValue: -656839
+      OutTangent:
+        RawValue: 0
+      TangentMode: 0
+      TangentModeLeft: 2
+      TangentModeRight: 0
+      WeightedMode: 0
   PunchRecoveryTime:
-    RawValue: 32768
+    RawValue: 65536
   PunchAnimationRecoveryTime:
     RawValue: 13107
   PunchDestroyTime:

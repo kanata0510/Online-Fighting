@@ -6,6 +6,6 @@ namespace Quantum
 {
     public class PunchConfig: AssetObject
     {
-        public AssetRef<EntityPrototype> PunchPrototype;
+        public AssetRef<PunchSpecAsset> PunchAssetRef;
     }
 }

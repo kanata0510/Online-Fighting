@@ -16,13 +16,24 @@ MonoBehaviour:
     Path: Resources/Asteroids Game Config
     Guid:
       Value: 394906534049221855
-  PunchColliderPrototype:
-    Id:
-      Value: 1465063172171457746
+  Curve:
+    Samples: []
+    PreWrapMode: 0
+    PostWrapMode: 0
+    StartTime:
+      RawValue: 0
+    EndTime:
+      RawValue: 65536
+    Resolution: 32
+    OriginalPreWrapMode: 0
+    OriginalPostWrapMode: 0
+    Keys: []
   PunchRecoveryTime:
     RawValue: 32768
   PunchAnimationRecoveryTime:
     RawValue: 13107
+  PunchDestroyTime:
+    RawValue: 65536
   PunchPower:
     RawValue: 327680
   MaxHP: 100

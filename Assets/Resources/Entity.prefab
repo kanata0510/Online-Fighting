@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: -7028455618718903614}
   - component: {fileID: 2603736062419756456}
   - component: {fileID: -7863984893228538256}
-  - component: {fileID: 886091114397486474}
   - component: {fileID: -4654307907260139799}
   - component: {fileID: -5446137709488747134}
   m_Layer: 0
@@ -64,7 +63,7 @@ MonoBehaviour:
     Material:
       Id:
         Value: 0
-    SourceCollider: {fileID: 886091114397486474}
+    SourceCollider: {fileID: 0}
     IsEnabled: 1
     Shape2D:
       ShapeType: 0
@@ -151,7 +150,7 @@ MonoBehaviour:
       X:
         RawValue: 0
       Y:
-        RawValue: 0
+        RawValue: 49152
       Z:
         RawValue: 0
     GravityScale:
@@ -209,7 +208,7 @@ MonoBehaviour:
   BindBehaviour: 1
   ManualDisposal: 0
   ViewFlags: 0
-  InterpolationMode: 2
+  InterpolationMode: 0
   ErrorCorrectionRateMin: 3.3
   ErrorCorrectionRateMax: 10
   ErrorPositionBlendStart: 0.25
@@ -241,6 +240,11 @@ MonoBehaviour:
     PlayerHP:
       RawValue: 0
     PlayerNumber: 0
+    CurrentVelocity:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
 --- !u!114 &2603736062419756456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,29 +315,6 @@ MonoBehaviour:
       Value: 0
     AnimatorVariables: []
     BlendTreeWeights: []
---- !u!136 &886091114397486474
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8176199811940016233}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.2
-  m_Height: 1.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &-4654307907260139799
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,14 +17,14 @@ MonoBehaviour:
     Guid:
       Value: 323527616151929684
   KinematicSpeed:
-    RawValue: 524288
+    RawValue: 65536
   JumpMultiplier:
     RawValue: 65536
   Gravity:
     X:
       RawValue: 0
     Y:
-      RawValue: -1310720
+      RawValue: -655360
     Z:
       RawValue: 0
   MaxGroundAngle:

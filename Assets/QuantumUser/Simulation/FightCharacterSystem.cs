@@ -4,7 +4,7 @@ using UnityEngine.Scripting;
 namespace Quantum.Fighting
 {
     [Preserve]
-    public unsafe class FightCharacterSystem : SystemMainThreadFilter<FightCharacterSystem.Filter>//, ISignalOnCollisionCharacterHitPunch
+    public unsafe class FightCharacterSystem : SystemMainThreadFilter<FightCharacterSystem.Filter>
     {
         public struct Filter
         {
@@ -46,17 +46,64 @@ namespace Quantum.Fighting
 
         private void UpdateCharacterMovement(Frame f, ref Filter filter, Input* input)
         {
-            FP turnSpeed = 1;
+            FP turnSpeed = 2;
+            FP acceleration = FP._1_10;
+            //KCC* kcc = filter.KCC;
+            //kcc->SetInputDirection(FPVector3.Zero);
+            
+            // 目標速度を計算
+            FPVector2 targetVelocity = input->MoveDirection * turnSpeed;
+
+            // 加速または減速
+            filter.PlayerCharacter->CurrentVelocity = targetVelocity;
+            /*
+            if (input->MoveDirection.Magnitude > 0)
+            {
+                if (filter.PlayerCharacter->CurrentVelocity == FPVector2.Zero)
+                {
+                    filter.PlayerCharacter->CurrentVelocity = FPVector2.MoveTowards(filter.PlayerCharacter->CurrentVelocity,
+                        targetVelocity, acceleration * f.DeltaTime);
+                }
+                else
+                {
+                    filter.PlayerCharacter->CurrentVelocity = FPVector2.MoveTowards(
+                                                                  filter.PlayerCharacter->CurrentVelocity,
+                                                                  targetVelocity, acceleration * acceleration * acceleration * acceleration * acceleration * acceleration * f.DeltaTime);
+                }
+            }
+            else
+            {
+                filter.PlayerCharacter->CurrentVelocity = FPVector2.Zero;
+                //filter.PlayerCharacter->CurrentVelocity = FPVector2.MoveTowards(filter.PlayerCharacter->CurrentVelocity,
+                  //  FPVector2.Zero, acceleration * f.DeltaTime);
+            }
+            */
             AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Backward", input->Left);
             if (input->Left)
             {
-                filter.Transform->Position = new FPVector3(0, filter.Transform->Position.Y, filter.Transform->Position.Z - turnSpeed * f.DeltaTime);
+                /*
+                if (filter.PlayerCharacter->CurrentVelocity.X > 0)
+                {
+                    filter.PlayerCharacter->CurrentVelocity = FPVector2.Zero;
+                }
+                */
+                //filter.Body->Velocity = new FPVector3( 0, 0, filter.PlayerCharacter->CurrentVelocity.X);
+                filter.Transform->Position = new FPVector3(0, filter.Transform->Position.Y, filter.Transform->Position.Z + filter.PlayerCharacter->CurrentVelocity.X * f.DeltaTime);
+                //filter.Transform->Teleport(f, new FPVector3(0, filter.Transform->Position.Y, filter.Transform->Position.Z + filter.PlayerCharacter->CurrentVelocity.X * f.DeltaTime));
             }
 
             AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Forward", input->Right);
             if (input->Right)
             {
-                filter.Transform->Position = new FPVector3(0, filter.Transform->Position.Y, filter.Transform->Position.Z + turnSpeed * f.DeltaTime);
+                /*
+                if (filter.PlayerCharacter->CurrentVelocity.X < 0)
+                {
+                    filter.PlayerCharacter->CurrentVelocity = FPVector2.Zero;
+                }
+                filter.Body->Velocity = new FPVector3(0, 0, filter.PlayerCharacter->CurrentVelocity.X);
+                */
+                filter.Transform->Position = new FPVector3(0, filter.Transform->Position.Y, filter.Transform->Position.Z + filter.PlayerCharacter->CurrentVelocity.X * f.DeltaTime);
+                //filter.Transform->Teleport(f, new FPVector3(0, filter.Transform->Position.Y, filter.Transform->Position.Z + filter.PlayerCharacter->CurrentVelocity.X * f.DeltaTime));
             }
         }
         
@@ -73,13 +120,14 @@ namespace Quantum.Fighting
                 AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", false);
             }
 
-            if (input->Fire && punch->RecoveryTime == FP._0)
+            if (input->Fire.WasPressed && punch->RecoveryTime == FP._0)
             {
-                FPVector3 punchPosition = filter.Transform->Position + filter.Transform->Forward * FP._0_50 +
+                FPVector3 punchPosition = filter.Transform->Position + filter.Transform->Forward * FP._0_25 +
                                           filter.Transform->Up * FP._1_10;
                 
                 var config = f.FindAsset(filter.Punch->PunchConfig);
-                f.Signals.PlayerPunch(filter.Entity, punchPosition, config.PunchPrototype);
+                var punchAsset = f.FindAsset(config.PunchAssetRef);
+                f.Signals.PlayerPunch(filter.PlayerCharacter->PlayerNumber, punchPosition, punchAsset);
                 
                 punch->RecoveryTime = f.Global->PunchRecoveryMaxTime;
                 punch->AnimationRecoveryTime = f.Global->PunchAnimationRecoveryMaxTime;

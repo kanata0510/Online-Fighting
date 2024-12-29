@@ -17,8 +17,14 @@ namespace Quantum
             // Note: Use GetKey() instead of GetKeyDown/Up. Quantum calculates up/down internally.
             i.Left = UnityEngine.Input.GetKey(KeyCode.A) || UnityEngine.Input.GetKey(KeyCode.LeftArrow);
             i.Right = UnityEngine.Input.GetKey(KeyCode.D) || UnityEngine.Input.GetKey(KeyCode.RightArrow);
-            i.Fire = UnityEngine.Input.GetKeyDown(KeyCode.Space) || UnityEngine.Input.GetKeyDown(KeyCode.Return);
+            i.Fire = UnityEngine.Input.GetKey(KeyCode.Space) || UnityEngine.Input.GetKey(KeyCode.Return);
             
+            FPVector2 moveDirection = FPVector2.Zero;
+            if (i.Left) { moveDirection += FPVector2.Left;  }
+            if (i.Right) { moveDirection += FPVector2.Right; }
+
+            i.MoveDirection = moveDirection.Normalized;
+
             callback.SetInput(i, DeterministicInputFlags.Repeatable);
         }
     }

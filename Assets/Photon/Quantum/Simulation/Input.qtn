@@ -3,4 +3,5 @@ input {
     button Right;
     button Up;
     button Fire;
+    FPVector2 MoveDirection;
 }

@@ -22,20 +22,43 @@ namespace Quantum.Fighting
             }
         }
         
-        public void PlayerPunch(Frame f, EntityRef owner, FPVector3 spawnPosition, AssetRef<EntityPrototype> punchPrototype)
+        public void PlayerPunch(Frame f, int playerNumber, FPVector3 spawnPosition, PunchSpecAsset punchSpecAsset)
         {
-            var punchEntity = f.Create(punchPrototype);
+            var hits = f.Physics3D.OverlapShape(spawnPosition, FPQuaternion.Identity, punchSpecAsset.AttackShape.CreateShape(f), punchSpecAsset.AttackLayers,
+                QueryOptions.ComputeDetailedInfo | QueryOptions.HitKinematics | QueryOptions.HitDynamics);
+            Debug.Log(hits.Count);
+            Debug.Log("playerNumber : "+playerNumber);
+            if (hits.Count == 0)
+            {
+                return;
+            }
             
-            PunchRef* punchRef = f.Unsafe.GetPointer<PunchRef>(punchEntity);
-            PlayerCharacter* playerCharacter = f.Unsafe.GetPointer<PlayerCharacter>(owner);
-            punchRef->PlayerNumber = playerCharacter->PlayerNumber;
-            
-            PunchRef* punch = f.Unsafe.GetPointer<PunchRef>(punchEntity);
-            punch->DestroyTime = f.Global->PunchDestroyTime;
-            
-            Transform3D* punchTransform = f.Unsafe.GetPointer<Transform3D>(punchEntity);
-            punchTransform->Position = spawnPosition;
-            punchTransform->Teleport(f, spawnPosition);
+            for (var i = 0; i < hits.Count; i++)
+            {
+                var target = hits[i].Entity;
+                if (f.Unsafe.TryGetPointer<PlayerCharacter>(target, out var character))
+                {
+                    Debug.Log("character : " + character->PlayerNumber);
+                    // Chara Hit Punch
+                    if (playerNumber == character->PlayerNumber) continue;
+                    
+                    if (f.Unsafe.TryGetPointer(target, out PhysicsBody3D* physicsBody3D))
+                    {
+                        if (f.Unsafe.TryGetPointer(target, out Transform3D* transform))
+                        {
+                            var config = f.FindAsset(f.RuntimeConfig.GameConfig);
+                            physicsBody3D->AddLinearImpulse(transform->Back * config.PunchPower);
+                            character->PlayerHP -= config.PunchDamage;
+                            f.Events.Damage(character->PlayerNumber, character->PlayerHP, config.MaxHP);
+                            if (character->PlayerHP <= FP._0)
+                            {
+                                f.Global->IsGameEnd = true;
+                                f.Events.GameEnd(character->PlayerNumber);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

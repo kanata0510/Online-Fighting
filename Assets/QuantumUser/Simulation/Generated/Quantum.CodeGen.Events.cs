@@ -67,9 +67,10 @@ namespace Quantum {
           default: break;
         }
       }
-      public EventDamage Damage(EntityRef CharacterEntity, Int32 MaxHP) {
+      public EventDamage Damage(Int32 CharacterNumber, FP PlayerHP, Int32 MaxHP) {
         var ev = _f.Context.AcquireEvent<EventDamage>(EventDamage.ID);
-        ev.CharacterEntity = CharacterEntity;
+        ev.CharacterNumber = CharacterNumber;
+        ev.PlayerHP = PlayerHP;
         ev.MaxHP = MaxHP;
         _f.AddEvent(ev);
         return ev;
@@ -90,7 +91,8 @@ namespace Quantum {
   }
   public unsafe partial class EventDamage : EventBase {
     public new const Int32 ID = 1;
-    public EntityRef CharacterEntity;
+    public Int32 CharacterNumber;
+    public FP PlayerHP;
     public Int32 MaxHP;
     protected EventDamage(Int32 id, EventFlags flags) : 
         base(id, flags) {
@@ -109,7 +111,8 @@ namespace Quantum {
     public override Int32 GetHashCode() {
       unchecked {
         var hash = 41;
-        hash = hash * 31 + CharacterEntity.GetHashCode();
+        hash = hash * 31 + CharacterNumber.GetHashCode();
+        hash = hash * 31 + PlayerHP.GetHashCode();
         hash = hash * 31 + MaxHP.GetHashCode();
         return hash;
       }

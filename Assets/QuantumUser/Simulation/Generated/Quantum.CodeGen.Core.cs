@@ -442,8 +442,8 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Input {
-    public const Int32 SIZE = 48;
-    public const Int32 ALIGNMENT = 4;
+    public const Int32 SIZE = 64;
+    public const Int32 ALIGNMENT = 8;
     [FieldOffset(12)]
     public Button Left;
     [FieldOffset(24)]
@@ -452,6 +452,8 @@ namespace Quantum {
     public Button Up;
     [FieldOffset(0)]
     public Button Fire;
+    [FieldOffset(48)]
+    public FPVector2 MoveDirection;
     public override Int32 GetHashCode() {
       unchecked { 
         var hash = 19249;
@@ -459,6 +461,7 @@ namespace Quantum {
         hash = hash * 31 + Right.GetHashCode();
         hash = hash * 31 + Up.GetHashCode();
         hash = hash * 31 + Fire.GetHashCode();
+        hash = hash * 31 + MoveDirection.GetHashCode();
         return hash;
       }
     }
@@ -489,6 +492,7 @@ namespace Quantum {
         Button.Serialize(&p->Left, serializer);
         Button.Serialize(&p->Right, serializer);
         Button.Serialize(&p->Up, serializer);
+        FPVector2.Serialize(&p->MoveDirection, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -721,7 +725,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct _globals_ {
-    public const Int32 SIZE = 896;
+    public const Int32 SIZE = 992;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     public AssetRef<Map> Map;
@@ -743,30 +747,30 @@ namespace Quantum {
     public PhysicsSceneSettings PhysicsSettings;
     [FieldOffset(544)]
     public Int32 PlayerConnectedCount;
-    [FieldOffset(548)]
+    [FieldOffset(552)]
     [FramePrinter.FixedArrayAttribute(typeof(Input), 6)]
-    private fixed Byte _input_[288];
-    [FieldOffset(840)]
+    private fixed Byte _input_[384];
+    [FieldOffset(936)]
     public BitSet6 PlayerLastConnectionState;
-    [FieldOffset(880)]
+    [FieldOffset(976)]
     public FP PunchRecoveryMaxTime;
-    [FieldOffset(864)]
+    [FieldOffset(960)]
     public FP PunchAnimationRecoveryMaxTime;
-    [FieldOffset(872)]
+    [FieldOffset(968)]
     public FP PunchDestroyTime;
-    [FieldOffset(848)]
+    [FieldOffset(944)]
     public Int32 CurrentPlayerCount;
-    [FieldOffset(852)]
+    [FieldOffset(948)]
     public QBoolean IsGameEnd;
-    [FieldOffset(856)]
+    [FieldOffset(952)]
     public QBoolean IsGameStart;
-    [FieldOffset(860)]
+    [FieldOffset(956)]
     public QBoolean IsGameStartOnce;
-    [FieldOffset(888)]
+    [FieldOffset(984)]
     public FP StartWaitTime;
     public FixedArray<Input> input {
       get {
-        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 48, 6); }
+        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 64, 6); }
       }
     }
     public override Int32 GetHashCode() {
@@ -1133,17 +1137,20 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct PlayerCharacter : Quantum.IComponent {
-    public const Int32 SIZE = 16;
+    public const Int32 SIZE = 32;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(8)]
     public FP PlayerHP;
     [FieldOffset(0)]
     public Int32 PlayerNumber;
+    [FieldOffset(16)]
+    public FPVector2 CurrentVelocity;
     public override Int32 GetHashCode() {
       unchecked { 
         var hash = 17027;
         hash = hash * 31 + PlayerHP.GetHashCode();
         hash = hash * 31 + PlayerNumber.GetHashCode();
+        hash = hash * 31 + CurrentVelocity.GetHashCode();
         return hash;
       }
     }
@@ -1151,6 +1158,7 @@ namespace Quantum {
         var p = (PlayerCharacter*)ptr;
         serializer.Stream.Serialize(&p->PlayerNumber);
         FP.Serialize(&p->PlayerHP, serializer);
+        FPVector2.Serialize(&p->CurrentVelocity, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1223,7 +1231,7 @@ namespace Quantum {
     void OnCollisionCharacterHitPunch(Frame f, TriggerInfo3D info, PlayerCharacter* character, PunchRef* punch);
   }
   public unsafe partial interface ISignalPlayerPunch : ISignal {
-    void PlayerPunch(Frame f, EntityRef owner, FPVector3 spawnPosition, AssetRef<EntityPrototype> punchPrototype);
+    void PlayerPunch(Frame f, Int32 playerNumber, FPVector3 spawnPosition, PunchSpecAsset punchSpecAsset);
   }
   public static unsafe partial class Constants {
   }
@@ -1305,6 +1313,7 @@ namespace Quantum {
       i->Right = i->Right.Update(this.Number, input.Right);
       i->Up = i->Up.Update(this.Number, input.Up);
       i->Fire = i->Fire.Update(this.Number, input.Fire);
+      i->MoveDirection = input.MoveDirection;
     }
     public Input* GetPlayerInput(PlayerRef player) {
       if ((int)player >= (int)_globals->input.Length) { throw new System.ArgumentOutOfRangeException("player"); }
@@ -1329,12 +1338,12 @@ namespace Quantum {
           }
         }
       }
-      public void PlayerPunch(EntityRef owner, FPVector3 spawnPosition, AssetRef<EntityPrototype> punchPrototype) {
+      public void PlayerPunch(Int32 playerNumber, FPVector3 spawnPosition, PunchSpecAsset punchSpecAsset) {
         var array = _f._ISignalPlayerPunchSystems;
         for (Int32 i = 0; i < array.Length; ++i) {
           var s = array[i];
           if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
-            s.PlayerPunch(_f, owner, spawnPosition, punchPrototype);
+            s.PlayerPunch(_f, playerNumber, spawnPosition, punchSpecAsset);
           }
         }
       }

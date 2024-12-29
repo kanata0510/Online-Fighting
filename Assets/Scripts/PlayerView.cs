@@ -66,12 +66,10 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
     
     private void OnDamage(EventDamage eventDamage)
     {
-        var frame = QuantumRunner.Default.Game.Frames.Verified;
-        var character = frame.Get<PlayerCharacter>(eventDamage.CharacterEntity);
-        int playerIndex = character.PlayerNumber - 1;
-        ViewContext.players[playerIndex].slider.fillAmount = character.PlayerHP.AsFloat / eventDamage.MaxHP;
+        int playerIndex = eventDamage.CharacterNumber - 1;
+        ViewContext.players[playerIndex].slider.fillAmount = eventDamage.PlayerHP.AsFloat / eventDamage.MaxHP;
     }
-
+    
     private void OnGameEnd(EventGameEnd eventGameEnd)
     {
         StartCoroutine(GameEndCoroutine(eventGameEnd.LoseCharacterNumber));

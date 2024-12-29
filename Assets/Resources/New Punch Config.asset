@@ -16,6 +16,6 @@ MonoBehaviour:
     Path: Resources/New Punch Config
     Guid:
       Value: 453708027477918063
-  PunchPrototype:
+  PunchAssetRef:
     Id:
-      Value: 1465063172171457746
+      Value: 458331772420388897
