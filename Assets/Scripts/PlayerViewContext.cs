@@ -11,6 +11,7 @@ namespace Quantum {
         {
             public TextMeshProUGUI nameLabel;
             public Image slider;
+            public Image coolTime;
         }
         public View[] players;
 

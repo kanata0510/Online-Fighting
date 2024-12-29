@@ -206,16 +206,10 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Input))]
   public unsafe partial class InputPrototype : StructPrototype {
-    public Button Left;
-    public Button Right;
-    public Button Up;
     public Button Fire;
     public FPVector2 MoveDirection;
     partial void MaterializeUser(Frame frame, ref Quantum.Input result, in PrototypeMaterializationContext context);
     public void Materialize(Frame frame, ref Quantum.Input result, in PrototypeMaterializationContext context = default) {
-        result.Left = this.Left;
-        result.Right = this.Right;
-        result.Up = this.Up;
         result.Fire = this.Fire;
         result.MoveDirection = this.MoveDirection;
         MaterializeUser(frame, ref result, in context);
@@ -366,7 +360,6 @@ namespace Quantum.Prototypes {
   public unsafe partial class PlayerCharacterPrototype : ComponentPrototype<Quantum.PlayerCharacter> {
     public FP PlayerHP;
     public Int32 PlayerNumber;
-    public FPVector2 CurrentVelocity;
     partial void MaterializeUser(Frame frame, ref Quantum.PlayerCharacter result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.PlayerCharacter component = default;
@@ -376,7 +369,6 @@ namespace Quantum.Prototypes {
     public void Materialize(Frame frame, ref Quantum.PlayerCharacter result, in PrototypeMaterializationContext context = default) {
         result.PlayerHP = this.PlayerHP;
         result.PlayerNumber = this.PlayerNumber;
-        result.CurrentVelocity = this.CurrentVelocity;
         MaterializeUser(frame, ref result, in context);
     }
   }

@@ -67,10 +67,7 @@ namespace Quantum {
   }
   [System.FlagsAttribute()]
   public enum InputButtons : int {
-    Left = 1 << 0,
-    Right = 1 << 1,
-    Up = 1 << 2,
-    Fire = 1 << 3,
+    Fire = 1 << 0,
   }
   public static unsafe partial class FlagsExtensions {
     public static Boolean IsFlagSet(this InputButtons self, InputButtons flag) {
@@ -442,24 +439,15 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Input {
-    public const Int32 SIZE = 64;
+    public const Int32 SIZE = 32;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(12)]
-    public Button Left;
-    [FieldOffset(24)]
-    public Button Right;
-    [FieldOffset(36)]
-    public Button Up;
     [FieldOffset(0)]
     public Button Fire;
-    [FieldOffset(48)]
+    [FieldOffset(16)]
     public FPVector2 MoveDirection;
     public override Int32 GetHashCode() {
       unchecked { 
         var hash = 19249;
-        hash = hash * 31 + Left.GetHashCode();
-        hash = hash * 31 + Right.GetHashCode();
-        hash = hash * 31 + Up.GetHashCode();
         hash = hash * 31 + Fire.GetHashCode();
         hash = hash * 31 + MoveDirection.GetHashCode();
         return hash;
@@ -470,18 +458,12 @@ namespace Quantum {
     }
     public Boolean IsDown(InputButtons button) {
       switch (button) {
-        case InputButtons.Left: return Left.IsDown;
-        case InputButtons.Right: return Right.IsDown;
-        case InputButtons.Up: return Up.IsDown;
         case InputButtons.Fire: return Fire.IsDown;
         default: return false;
       }
     }
     public Boolean WasPressed(InputButtons button) {
       switch (button) {
-        case InputButtons.Left: return Left.WasPressed;
-        case InputButtons.Right: return Right.WasPressed;
-        case InputButtons.Up: return Up.WasPressed;
         case InputButtons.Fire: return Fire.WasPressed;
         default: return false;
       }
@@ -489,9 +471,6 @@ namespace Quantum {
     static partial void SerializeCodeGen(void* ptr, FrameSerializer serializer) {
         var p = (Input*)ptr;
         Button.Serialize(&p->Fire, serializer);
-        Button.Serialize(&p->Left, serializer);
-        Button.Serialize(&p->Right, serializer);
-        Button.Serialize(&p->Up, serializer);
         FPVector2.Serialize(&p->MoveDirection, serializer);
     }
   }
@@ -725,7 +704,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct _globals_ {
-    public const Int32 SIZE = 992;
+    public const Int32 SIZE = 792;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     public AssetRef<Map> Map;
@@ -749,28 +728,26 @@ namespace Quantum {
     public Int32 PlayerConnectedCount;
     [FieldOffset(552)]
     [FramePrinter.FixedArrayAttribute(typeof(Input), 6)]
-    private fixed Byte _input_[384];
-    [FieldOffset(936)]
+    private fixed Byte _input_[192];
+    [FieldOffset(744)]
     public BitSet6 PlayerLastConnectionState;
-    [FieldOffset(976)]
+    [FieldOffset(776)]
     public FP PunchRecoveryMaxTime;
-    [FieldOffset(960)]
+    [FieldOffset(768)]
     public FP PunchAnimationRecoveryMaxTime;
-    [FieldOffset(968)]
-    public FP PunchDestroyTime;
-    [FieldOffset(944)]
+    [FieldOffset(752)]
     public Int32 CurrentPlayerCount;
-    [FieldOffset(948)]
+    [FieldOffset(756)]
     public QBoolean IsGameEnd;
-    [FieldOffset(952)]
+    [FieldOffset(760)]
     public QBoolean IsGameStart;
-    [FieldOffset(956)]
+    [FieldOffset(764)]
     public QBoolean IsGameStartOnce;
-    [FieldOffset(984)]
+    [FieldOffset(784)]
     public FP StartWaitTime;
     public FixedArray<Input> input {
       get {
-        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 64, 6); }
+        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 32, 6); }
       }
     }
     public override Int32 GetHashCode() {
@@ -790,7 +767,6 @@ namespace Quantum {
         hash = hash * 31 + PlayerLastConnectionState.GetHashCode();
         hash = hash * 31 + PunchRecoveryMaxTime.GetHashCode();
         hash = hash * 31 + PunchAnimationRecoveryMaxTime.GetHashCode();
-        hash = hash * 31 + PunchDestroyTime.GetHashCode();
         hash = hash * 31 + CurrentPlayerCount.GetHashCode();
         hash = hash * 31 + IsGameEnd.GetHashCode();
         hash = hash * 31 + IsGameStart.GetHashCode();
@@ -818,7 +794,6 @@ namespace Quantum {
         QBoolean.Serialize(&p->IsGameStart, serializer);
         QBoolean.Serialize(&p->IsGameStartOnce, serializer);
         FP.Serialize(&p->PunchAnimationRecoveryMaxTime, serializer);
-        FP.Serialize(&p->PunchDestroyTime, serializer);
         FP.Serialize(&p->PunchRecoveryMaxTime, serializer);
         FP.Serialize(&p->StartWaitTime, serializer);
     }
@@ -1137,20 +1112,17 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct PlayerCharacter : Quantum.IComponent {
-    public const Int32 SIZE = 32;
+    public const Int32 SIZE = 16;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(8)]
     public FP PlayerHP;
     [FieldOffset(0)]
     public Int32 PlayerNumber;
-    [FieldOffset(16)]
-    public FPVector2 CurrentVelocity;
     public override Int32 GetHashCode() {
       unchecked { 
         var hash = 17027;
         hash = hash * 31 + PlayerHP.GetHashCode();
         hash = hash * 31 + PlayerNumber.GetHashCode();
-        hash = hash * 31 + CurrentVelocity.GetHashCode();
         return hash;
       }
     }
@@ -1158,7 +1130,6 @@ namespace Quantum {
         var p = (PlayerCharacter*)ptr;
         serializer.Stream.Serialize(&p->PlayerNumber);
         FP.Serialize(&p->PlayerHP, serializer);
-        FPVector2.Serialize(&p->CurrentVelocity, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1309,9 +1280,6 @@ namespace Quantum {
     partial void SetPlayerInputCodeGen(PlayerRef player, Input input) {
       if ((int)player >= (int)_globals->input.Length) { throw new System.ArgumentOutOfRangeException("player"); }
       var i = _globals->input.GetPointer(player);
-      i->Left = i->Left.Update(this.Number, input.Left);
-      i->Right = i->Right.Update(this.Number, input.Right);
-      i->Up = i->Up.Update(this.Number, input.Up);
       i->Fire = i->Fire.Update(this.Number, input.Fire);
       i->MoveDirection = input.MoveDirection;
     }

@@ -2,5 +2,4 @@ component PlayerCharacter
 {
     FP PlayerHP;
     Int32 PlayerNumber;
-    FPVector2 CurrentVelocity;
 }

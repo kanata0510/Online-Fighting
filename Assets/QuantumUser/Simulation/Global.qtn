@@ -2,7 +2,6 @@ global
 {
     FP PunchRecoveryMaxTime;
     FP PunchAnimationRecoveryMaxTime;
-    FP PunchDestroyTime;
     Int32 CurrentPlayerCount;
     Boolean IsGameEnd;
     Boolean IsGameStart;

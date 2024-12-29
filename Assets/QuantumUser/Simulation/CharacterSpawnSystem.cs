@@ -25,8 +25,7 @@ namespace Quantum.Fighting
                 
                 frame.Global->PunchRecoveryMaxTime = config.PunchRecoveryTime;
                 frame.Global->PunchAnimationRecoveryMaxTime = config.PunchAnimationRecoveryTime;
-                frame.Global->PunchDestroyTime = config.PunchDestroyTime;
-                // Debug.LogError(config.PunchDestroyTime);
+                
                 Transform3D* transform3D = frame.Unsafe.GetPointer<Transform3D>(characterEntity);
                 PlayerCharacter* character = frame.Unsafe.GetPointer<PlayerCharacter>(characterEntity);
                 

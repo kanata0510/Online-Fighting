@@ -12,6 +12,7 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
         
         QuantumEvent.Subscribe<EventGameStart>(this, OnGameStart);
         QuantumEvent.Subscribe<EventDamage>(this, OnDamage);
+        QuantumEvent.Subscribe<EventPunch>(this, OnPunch);
         QuantumEvent.Subscribe<EventGameEnd>(this, OnGameEnd);
     }
 
@@ -68,6 +69,22 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
     {
         int playerIndex = eventDamage.CharacterNumber - 1;
         ViewContext.players[playerIndex].slider.fillAmount = eventDamage.PlayerHP.AsFloat / eventDamage.MaxHP;
+    }
+    
+    private void OnPunch(EventPunch eventPunch)
+    {
+        StartCoroutine(PunchCoroutine(eventPunch.CharacterNumber, eventPunch.RecoveryTime));
+    }
+    
+    IEnumerator PunchCoroutine(int characterNumber, Photon.Deterministic.FP recoveryTime)
+    {
+        for (Photon.Deterministic.FP t = 0; t < recoveryTime; t += QuantumRunner.Default.Game.Frames.Verified.DeltaTime)
+        {
+            ViewContext.players[characterNumber - 1].coolTime.fillAmount = t.AsFloat / recoveryTime.AsFloat;
+            yield return null;
+        }
+
+        ViewContext.players[characterNumber - 1].coolTime.fillAmount = 1;
     }
     
     private void OnGameEnd(EventGameEnd eventGameEnd)

@@ -5,6 +5,12 @@ event Damage
     Int32 MaxHP;
 }
 
+event Punch
+{
+    Int32 CharacterNumber;
+    FP RecoveryTime;
+}
+
 event GameEnd
 {
     Int32 LoseCharacterNumber;
