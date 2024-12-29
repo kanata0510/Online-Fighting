@@ -55,11 +55,13 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
     {
         ViewContext.waitingText.gameObject.SetActive(false);
         ViewContext.readyText.SetActive(true);
+        ViewContext.audioSource.PlayOneShot(ViewContext.audioClips[0]);
         ViewContext.startAnimator.Play("Ready");
         yield return new WaitForSeconds(1);
         ViewContext.readyText.SetActive(false);
         
         ViewContext.fightText.SetActive(true);
+        ViewContext.audioSource.PlayOneShot(ViewContext.audioClips[1]);
         ViewContext.startAnimator.Play("GameStart");
         yield return new WaitForSeconds(1);
         ViewContext.fightText.SetActive(false);
@@ -67,20 +69,21 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
     
     private void OnDamage(EventDamage eventDamage)
     {
+        ViewContext.audioSource.PlayOneShot(ViewContext.audioClips[4]);
         int playerIndex = eventDamage.CharacterNumber - 1;
         ViewContext.players[playerIndex].slider.fillAmount = eventDamage.PlayerHP.AsFloat / eventDamage.MaxHP;
     }
     
     private void OnPunch(EventPunch eventPunch)
     {
-        StartCoroutine(PunchCoroutine(eventPunch.CharacterNumber, eventPunch.RecoveryTime));
+        StartCoroutine(PunchCoroutine(eventPunch.CharacterNumber, eventPunch.RecoveryTime.AsFloat));
     }
     
-    IEnumerator PunchCoroutine(int characterNumber, Photon.Deterministic.FP recoveryTime)
+    IEnumerator PunchCoroutine(int characterNumber, float recoveryTime)
     {
-        for (Photon.Deterministic.FP t = 0; t < recoveryTime; t += QuantumRunner.Default.Game.Frames.Verified.DeltaTime)
+        for (float t = 0; t < recoveryTime; t += Time.deltaTime)
         {
-            ViewContext.players[characterNumber - 1].coolTime.fillAmount = t.AsFloat / recoveryTime.AsFloat;
+            ViewContext.players[characterNumber - 1].coolTime.fillAmount = t / recoveryTime;
             yield return null;
         }
 
@@ -95,6 +98,7 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
     IEnumerator GameEndCoroutine(int loseCharacterNumber)
     {
         ViewContext.endText.SetActive(true);
+        ViewContext.audioSource.PlayOneShot(ViewContext.audioClips[2]);
         ViewContext.endAnimator.Play("GameEnd");
         yield return new WaitForSeconds(2);
         ViewContext.endText.SetActive(false);
@@ -104,6 +108,7 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
         string playerName = frame.GetPlayerData(winnerCharacterNumber).PlayerNickname;
         ViewContext.winnerText.text = $"{playerName}\n<size=160>WIN</size>";
         ViewContext.winnerText.gameObject.SetActive(true);
+        ViewContext.audioSource.PlayOneShot(ViewContext.audioClips[3]);
         ViewContext.endAnimator.Play("GameWinner");
         
         yield return new WaitForSeconds(1);

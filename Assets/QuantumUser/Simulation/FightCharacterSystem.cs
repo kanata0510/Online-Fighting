@@ -19,7 +19,13 @@ namespace Quantum.Fighting
 
         public override void Update(Frame f, ref Filter filter)
         {
-            if (f.Global->IsGameEnd) return;
+            if (f.Global->IsGameEnd)
+            {
+                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Backward", false);
+                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Forward", false);
+                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", false);
+                return;
+            }
             if (f.Global->StartWaitTime > FP._0)
             {
                 f.Global->StartWaitTime = f.Global->StartWaitTime - f.DeltaTime < FP._0 ? FP._0 : f.Global->StartWaitTime - f.DeltaTime;
@@ -39,6 +45,9 @@ namespace Quantum.Fighting
                 f.Global->IsGameStartOnce = true;
                 f.Global->StartWaitTime = FP._4;
                 filter.Transform->Teleport(f, new FPVector3(FP._0, FP._0_01, -FP._1_50));
+                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Backward", false);
+                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Forward", false);
+                AnimatorComponent.SetBoolean(f, filter.AnimatorComponent, "Punch", false);
             }
             
             UpdateCharacterPunch(f, ref filter, input);
