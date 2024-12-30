@@ -14,6 +14,7 @@ namespace Quantum {
             public Image coolTime;
         }
         public View[] players;
+
         public AudioSource audioSource;
         public AudioClip[] audioClips;
 

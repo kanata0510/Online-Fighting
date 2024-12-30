@@ -16,7 +16,7 @@ event GameEnd
     Int32 LoseCharacterNumber;
 }
 
-event GameStart
+event PlayerAdd
 {
-    entity_ref PlayerEntity;
+    Int32 PlayerNumber;
 }

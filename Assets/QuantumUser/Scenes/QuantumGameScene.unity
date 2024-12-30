@@ -4900,6 +4900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2088558544}
   - component: {fileID: 2088558543}
+  - component: {fileID: 2088558548}
   - component: {fileID: 2088558545}
   - component: {fileID: 2088558547}
   m_Layer: 0
@@ -4991,6 +4992,20 @@ MonoBehaviour:
   endText: {fileID: 534007673}
   winnerText: {fileID: 134284762}
   returnMenuButton: {fileID: 1064282030}
+--- !u!114 &2088558548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088558542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b404928167e457e45adc1b9da9aed9ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Updater: {fileID: 2088558543}
+  UseFindUpdater: 0
 --- !u!1 &2090612190
 GameObject:
   m_ObjectHideFlags: 0

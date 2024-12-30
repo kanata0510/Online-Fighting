@@ -64,7 +64,7 @@ namespace Quantum {
           case EventDamage.ID: result = typeof(EventDamage); return;
           case EventPunch.ID: result = typeof(EventPunch); return;
           case EventGameEnd.ID: result = typeof(EventGameEnd); return;
-          case EventGameStart.ID: result = typeof(EventGameStart); return;
+          case EventPlayerAdd.ID: result = typeof(EventPlayerAdd); return;
           default: break;
         }
       }
@@ -89,9 +89,9 @@ namespace Quantum {
         _f.AddEvent(ev);
         return ev;
       }
-      public EventGameStart GameStart(EntityRef PlayerEntity) {
-        var ev = _f.Context.AcquireEvent<EventGameStart>(EventGameStart.ID);
-        ev.PlayerEntity = PlayerEntity;
+      public EventPlayerAdd PlayerAdd(Int32 PlayerNumber) {
+        var ev = _f.Context.AcquireEvent<EventPlayerAdd>(EventPlayerAdd.ID);
+        ev.PlayerNumber = PlayerNumber;
         _f.AddEvent(ev);
         return ev;
       }
@@ -178,13 +178,13 @@ namespace Quantum {
       }
     }
   }
-  public unsafe partial class EventGameStart : EventBase {
+  public unsafe partial class EventPlayerAdd : EventBase {
     public new const Int32 ID = 4;
-    public EntityRef PlayerEntity;
-    protected EventGameStart(Int32 id, EventFlags flags) : 
+    public Int32 PlayerNumber;
+    protected EventPlayerAdd(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
-    public EventGameStart() : 
+    public EventPlayerAdd() : 
         base(4, EventFlags.Server|EventFlags.Client) {
     }
     public new QuantumGame Game {
@@ -198,7 +198,7 @@ namespace Quantum {
     public override Int32 GetHashCode() {
       unchecked {
         var hash = 53;
-        hash = hash * 31 + PlayerEntity.GetHashCode();
+        hash = hash * 31 + PlayerNumber.GetHashCode();
         return hash;
       }
     }

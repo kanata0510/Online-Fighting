@@ -3,14 +3,12 @@ using System.Text;
 using Quantum;
 using UnityEngine;
 
-public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
+public class PlayerView : QuantumSceneViewComponent<PlayerViewContext>
 {
     private int frameCount = 0;
     private void Start() 
     {
-        PlayerAdded(EntityRef);
-        
-        QuantumEvent.Subscribe<EventGameStart>(this, OnGameStart);
+        QuantumEvent.Subscribe<EventPlayerAdd>(this, OnPlayerAdded);
         QuantumEvent.Subscribe<EventDamage>(this, OnDamage);
         QuantumEvent.Subscribe<EventPunch>(this, OnPunch);
         QuantumEvent.Subscribe<EventGameEnd>(this, OnGameEnd);
@@ -26,31 +24,20 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
         ViewContext.waitingText.text = builder.ToString();
         frameCount++;
     }
-    
-    private void OnDisable() {
-        QuantumEvent.UnsubscribeListener(this);
-    }
-    
-    private void OnGameStart(EventGameStart eventGameStart)
-    {
-        PlayerAdded(eventGameStart.PlayerEntity);
-    }
 
-    private void PlayerAdded(EntityRef addPlayerEntity)
+    private void OnPlayerAdded(EventPlayerAdd eventGameStart)
     {
         var frame = QuantumRunner.Default.Game.Frames.Verified;
-        var player = frame.Get<PlayerLink>(addPlayerEntity).PlayerRef;
-        if (frame.TryGet(addPlayerEntity, out PlayerCharacter character))
+
+        int playerIndex = eventGameStart.PlayerNumber - 1;
+        ViewContext.players[playerIndex].nameLabel.text = frame.GetPlayerData(playerIndex).PlayerNickname;
+
+        if (eventGameStart.PlayerNumber == 2)
         {
-            int playerIndex = character.PlayerNumber - 1;
-            ViewContext.players[playerIndex].nameLabel.text = frame.GetPlayerData(player).PlayerNickname;
-            if (character.PlayerNumber == 2)
-            {
-                StartCoroutine(GameStartCoroutine());
-            }
+            StartCoroutine(GameStartCoroutine());
         }
     }
-    
+
     IEnumerator GameStartCoroutine()
     {
         // StartCoroutine(AudioFadeOutCoroutine(0.5f));

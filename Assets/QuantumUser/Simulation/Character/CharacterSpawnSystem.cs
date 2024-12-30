@@ -36,13 +36,15 @@ namespace Quantum.Fighting
                 if (character->PlayerNumber == 1)
                 {
                     transform3D->Position = new FPVector3(FP._0, FP._0_01, -FP._1_50);
+                    frame.Events.PlayerAdd(1);
                 }else if (character->PlayerNumber == 2)
                 {
                     transform3D->Position = new FPVector3(FP._0, FP._0_01, FP._1_50);
                     transform3D->Rotation = FPQuaternion.Euler(FP._0, FP._180, FP._0);
                     
                     frame.Global->IsGameStart = true;
-                    frame.Events.GameStart(characterEntity);
+                    frame.Events.PlayerAdd(1);
+                    frame.Events.PlayerAdd(2);
                 }
             }
         }
