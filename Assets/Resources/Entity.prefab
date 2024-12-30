@@ -129,7 +129,7 @@ MonoBehaviour:
     LayerSource: 0
     Layer: 0
     CallbackFlags:
-      Value: 128
+      Value: 0
   PhysicsBody:
     IsEnabled: 1
     Config2D: 116
@@ -240,11 +240,6 @@ MonoBehaviour:
     PlayerHP:
       RawValue: 0
     PlayerNumber: 0
-    CurrentVelocity:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
 --- !u!114 &2603736062419756456
 MonoBehaviour:
   m_ObjectHideFlags: 0

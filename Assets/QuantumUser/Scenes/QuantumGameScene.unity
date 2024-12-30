@@ -834,9 +834,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 45bd6c626deff5b4c8c9490c2ce0d821, type: 3}
-  m_Resource: {fileID: 8300000, guid: 45bd6c626deff5b4c8c9490c2ce0d821, type: 3}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: b49c30c8b6e0cae4b862342c998cf914, type: 3}
+  m_Resource: {fileID: 8300000, guid: b49c30c8b6e0cae4b862342c998cf914, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -4981,7 +4981,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7c241633eb0a5b14cba0fa72b5d0529e, type: 3}
   - {fileID: 8300000, guid: 062255002abf2e046a39b2be4431a64e, type: 3}
   - {fileID: 8300000, guid: d5092346b4c78964dafcc564533226ff, type: 3}
-  - {fileID: 8300000, guid: 12faea99d854ea14195b395ef8c5c053, type: 3}
+  - {fileID: 8300000, guid: b9be7079eaebcba49b1ff03105af1d3c, type: 3}
+  - {fileID: 8300000, guid: 45bd6c626deff5b4c8c9490c2ce0d821, type: 3}
   startAnimator: {fileID: 317068641}
   waitingText: {fileID: 1944017150}
   readyText: {fileID: 1828329330}

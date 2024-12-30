@@ -53,6 +53,9 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
     
     IEnumerator GameStartCoroutine()
     {
+        // StartCoroutine(AudioFadeOutCoroutine(0.5f));
+        yield return new WaitForSeconds(0.5f);
+        ViewContext.audioSource.volume = 1;
         ViewContext.waitingText.gameObject.SetActive(false);
         ViewContext.readyText.SetActive(true);
         ViewContext.audioSource.PlayOneShot(ViewContext.audioClips[0]);
@@ -60,11 +63,24 @@ public class PlayerView : QuantumEntityViewComponent<PlayerViewContext>
         yield return new WaitForSeconds(1);
         ViewContext.readyText.SetActive(false);
         
+        // 音楽入れたら安っぽくなったのでコメントアウト
+        // ViewContext.audioSource.clip = ViewContext.audioClips[5];
+        // ViewContext.audioSource.Play();
         ViewContext.fightText.SetActive(true);
         ViewContext.audioSource.PlayOneShot(ViewContext.audioClips[1]);
         ViewContext.startAnimator.Play("GameStart");
         yield return new WaitForSeconds(1);
         ViewContext.fightText.SetActive(false);
+    }
+    
+    IEnumerator AudioFadeOutCoroutine(float duration)
+    {
+        for (float f = 0; f < duration; f += Time.deltaTime)
+        {
+            ViewContext.audioSource.volume = 1 - f / duration;
+            yield return null;
+        }
+        ViewContext.audioSource.Stop();
     }
     
     private void OnDamage(EventDamage eventDamage)
