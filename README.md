@@ -1,8 +1,8 @@
 # Online Fighting
 
 Photon Quantum 3を使用した格闘ゲームです。  
-Build for Windows：https://drive.google.com/file/d/1MTc_82tsHz4oiFnjFPgsvsbig8eHjMOI/view
-
+Build for Windows：https://drive.google.com/file/d/1-dNkFeYnuswqpcqB5tfjTAnJ-KBg8t9h/view  
+WebGL版はユニティちゃんシェーダーのバグが修正されたら挙げるかもしれません。
 
 
 © UTJ/UCL  
