@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Text;
+using Photon.Realtime;
 using Quantum;
 using UnityEngine;
 
@@ -104,6 +105,8 @@ public class PlayerView : QuantumSceneViewComponent<PlayerViewContext>
         ViewContext.audioSource.PlayOneShot(ViewContext.audioClips[2]);
         ViewContext.endAnimator.Play("GameEnd");
         yield return new WaitForSeconds(2);
+        QuantumRunner.Default.IsSessionUpdateDisabled = true;
+        QuantumRunner.Default.NetworkClient.Handler.RemoveInstance();
         ViewContext.endText.SetActive(false);
         
         var frame = QuantumRunner.Default.Game.Frames.Verified;

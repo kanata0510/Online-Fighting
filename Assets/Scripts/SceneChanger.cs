@@ -1,4 +1,5 @@
 using System.Collections;
+using Photon.Realtime;
 using Quantum;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -41,7 +42,11 @@ public class SceneChanger : MonoBehaviour
         animator.gameObject.SetActive(true);
         animator.Play("Fade");
         yield return new WaitForSeconds(transitionDurationTime);
-        QuantumRunner.ShutdownAll();
+        QuantumRunner.Default.NetworkClient.OpLeaveRoom(true);
+        QuantumRunner.Default.NetworkClient.State = ClientState.Disconnecting;
+        QuantumRunner.Default.NetworkClient.RealtimePeer.Disconnect();
+        QuantumRunner.Default.NetworkClient.RealtimePeer.IsSimulationEnabled = false;
+        QuantumRunner.Default.Game.RemoveAllPlayers();
         operation.allowSceneActivation = true;
     }
 }
